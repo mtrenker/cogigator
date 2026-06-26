@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cogigator Plan Duel — Implementation Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :root {
+      --ink: #0b1014;
+      --paper: #f6f0df;
+      --paper-2: #eadfbe;
+      --rust: #b94d26;
+      --copper: #e28f3f;
+      --acid: #b8ff4d;
+      --cyan: #6be7ff;
+      --coal: #111820;
+      --steel: #5d6a72;
+      --opus: #ff8b3d;
+      --gpt: #4dd7ff;
+      --grid: rgba(11,16,20,.11);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 11% -10%, rgba(255,139,61,.42), transparent 28rem),
+        radial-gradient(circle at 82% 3%, rgba(77,215,255,.35), transparent 24rem),
+        linear-gradient(135deg, rgba(11,16,20,.045) 25%, transparent 25%) 0 0 / 24px 24px,
+        linear-gradient(225deg, rgba(11,16,20,.035) 25%, transparent 25%) 0 0 / 24px 24px,
+        var(--paper);
+      font-family: Avenir Next, Segoe UI, Trebuchet MS, sans-serif;
+    }
+
+    .display {
+      font-family: Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif;
+      letter-spacing: -0.055em;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .grain::after {
+      content: "";
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: .12;
+      mix-blend-mode: multiply;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      z-index: 80;
+    }
+
+    .machine-card {
+      position: relative;
+      background: rgba(246,240,223,.76);
+      border: 2px solid rgba(11,16,20,.72);
+      box-shadow: 7px 7px 0 rgba(11,16,20,.88);
+      backdrop-filter: blur(9px);
+    }
+
+    .machine-card::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed rgba(11,16,20,.22);
+      pointer-events: none;
+    }
+
+    .dark-panel {
+      color: #f6f0df;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,139,61,.19), transparent 25rem),
+        radial-gradient(circle at 90% 10%, rgba(77,215,255,.16), transparent 22rem),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0/34px 34px,
+        linear-gradient(0deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0/34px 34px,
+        #10171d;
+      border: 2px solid rgba(246,240,223,.75);
+      box-shadow: 10px 10px 0 rgba(11,16,20,.9);
+    }
+
+    .tag {
+      border: 1px solid rgba(11,16,20,.35);
+      background: rgba(255,255,255,.35);
+      box-shadow: 2px 2px 0 rgba(11,16,20,.22);
+    }
+
+    .opus-bg { background: linear-gradient(135deg, rgba(255,139,61,.24), rgba(255,139,61,.06)); }
+    .gpt-bg { background: linear-gradient(135deg, rgba(77,215,255,.24), rgba(77,215,255,.06)); }
+    .opus-border { border-color: rgba(255,139,61,.9); }
+    .gpt-border { border-color: rgba(77,215,255,.9); }
+
+    .axis-label { font-size: 11px; fill: #0b1014; font-weight: 800; letter-spacing: .05em; }
+    .radar-grid { fill: none; stroke: rgba(11,16,20,.18); stroke-width: 1; }
+    .radar-opus { fill: rgba(255,139,61,.35); stroke: #d65f1f; stroke-width: 3; }
+    .radar-gpt { fill: rgba(77,215,255,.32); stroke: #168db0; stroke-width: 3; }
+
+    .flow-node { border: 2px solid rgba(246,240,223,.74); background: rgba(246,240,223,.08); }
+    .flow-line { height: 2px; background: linear-gradient(90deg, var(--opus), var(--gpt)); }
+
+    .phase-cell {
+      min-height: 5.8rem;
+      border: 1px solid rgba(11,16,20,.18);
+      background: rgba(255,255,255,.25);
+    }
+
+    .phase-mvp { background: linear-gradient(135deg, rgba(184,255,77,.28), rgba(255,255,255,.2)); }
+    .phase-post { background: linear-gradient(135deg, rgba(226,143,63,.22), rgba(255,255,255,.18)); }
+    .phase-hard { background: linear-gradient(135deg, rgba(77,215,255,.22), rgba(255,255,255,.18)); }
+
+    .risk-high { background: #3a1111; color: #ffe8d4; }
+    .risk-med { background: #703d15; color: #fff1d4; }
+    .risk-low { background: #18422a; color: #eaffd7; }
+
+    .bar-track { background: rgba(11,16,20,.13); border: 1px solid rgba(11,16,20,.28); }
+    .bar-opus { background: linear-gradient(90deg, #9d3d18, #ff8b3d); }
+    .bar-gpt { background: linear-gradient(90deg, #127493, #4dd7ff); }
+
+    .print-break { break-inside: avoid; }
+
+    @media print {
+      body { background: #f6f0df; }
+      .grain::after { display: none; }
+      .no-print { display: none; }
+      .machine-card, .dark-panel { box-shadow: none; }
+      section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="grain">
+  <header class="relative overflow-hidden border-b-2 border-black/70">
+    <div class="absolute inset-0 opacity-40" aria-hidden="true">
+      <svg class="h-full w-full" viewBox="0 0 1200 420" preserveAspectRatio="none">
+        <defs>
+          <pattern id="circuit" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M0 40H28M52 40H80M40 0V28M40 52V80" stroke="rgba(11,16,20,.22)" stroke-width="2" fill="none"/>
+            <circle cx="40" cy="40" r="7" fill="rgba(11,16,20,.18)"/>
+          </pattern>
+        </defs>
+        <rect width="1200" height="420" fill="url(#circuit)"/>
+        <path d="M-80 350 C200 230, 330 450, 590 275 S910 105, 1280 220" fill="none" stroke="rgba(185,77,38,.6)" stroke-width="26"/>
+        <path d="M-60 390 C210 290, 380 375, 590 330 S890 235, 1270 330" fill="none" stroke="rgba(77,215,255,.55)" stroke-width="18"/>
+      </svg>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-6 py-12 md:py-16">
+      <div class="mb-8 flex flex-wrap items-center gap-3 text-xs font-black uppercase tracking-[0.22em]">
+        <span class="tag px-3 py-1">Cogigator</span>
+        <span class="tag px-3 py-1">Plan Duel</span>
+        <span class="tag px-3 py-1">Factorio 2.0 / Space Age</span>
+        <span class="tag px-3 py-1">Pi + Kubernetes</span>
+      </div>
+
+      <div class="grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
+        <div>
+          <p class="mono mb-3 text-sm font-bold uppercase tracking-[0.35em] text-black/60">Implementation report</p>
+          <h1 class="display max-w-5xl text-6xl font-black leading-[.88] md:text-8xl">
+            Two blueprints for manufacturing thought.
+          </h1>
+          <p class="mt-7 max-w-3xl text-xl font-semibold leading-relaxed text-black/74">
+            A visual comparison of the revised Claude Opus 4.8 and GPT-5.5 plans for Cogigator:
+            the Factorio mod where intelligence is bounded by physical machines, datacenter fluids,
+            Pi approval flows, and a GitOps-managed headless server.
+          </p>
+        </div>
+
+        <div class="machine-card p-6">
+          <p class="mono text-xs font-black uppercase tracking-[0.25em] text-black/55">Executive read</p>
+          <div class="mt-4 space-y-4 text-sm font-semibold leading-relaxed">
+            <p><b>Claude Opus</b> is the sharper infrastructure conservative: RCON-first, Pi-native, no StatefulSet blast radius, and a bold mechanic where in-game Cognition can govern real LLM spend.</p>
+            <p><b>GPT-5.5</b> is the steadier product engineer: clearer entity families, broader staged transport, stronger testing detail, and a richer path toward multi-fluid datacenter gameplay.</p>
+            <p class="border-t border-black/20 pt-4"><b>Recommendation:</b> use Claude's infra posture and cognition-as-capability spine, with GPT's entity taxonomy, testing strategy, and staged gameplay maturation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-6 py-10 md:py-14">
+    <nav class="no-print sticky top-3 z-50 mb-12 flex flex-wrap gap-2 rounded-full border-2 border-black/70 bg-[#f6f0df]/85 p-2 text-xs font-black uppercase tracking-[0.16em] shadow-[5px_5px_0_rgba(0,0,0,.75)] backdrop-blur">
+      <a class="rounded-full px-4 py-2 hover:bg-black hover:text-[#f6f0df]" href="#snapshot">Snapshot</a>
+      <a class="rounded-full px-4 py-2 hover:bg-black hover:text-[#f6f0df]" href="#radar">Radar</a>
+      <a class="rounded-full px-4 py-2 hover:bg-black hover:text-[#f6f0df]" href="#timeline">Timeline</a>
+      <a class="rounded-full px-4 py-2 hover:bg-black hover:text-[#f6f0df]" href="#architecture">Architecture</a>
+      <a class="rounded-full px-4 py-2 hover:bg-black hover:text-[#f6f0df]" href="#comparison">Comparison</a>
+      <a class="rounded-full px-4 py-2 hover:bg-black hover:text-[#f6f0df]" href="#risks">Risks</a>
+      <a class="rounded-full px-4 py-2 hover:bg-black hover:text-[#f6f0df]" href="#synthesis">Synthesis</a>
+    </nav>
+
+    <section id="snapshot" class="print-break mb-16">
+      <div class="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p class="mono text-xs font-black uppercase tracking-[0.28em] text-black/50">01 / Plan identity</p>
+          <h2 class="display text-5xl font-black md:text-6xl">Strategic DNA</h2>
+        </div>
+        <p class="hidden max-w-md text-right text-sm font-bold text-black/60 md:block">Both plans agree on the core shape: mod authority, bridge mediation, Pi cockpit, and manufactured cognition.</p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        <article class="machine-card opus-bg opus-border p-7">
+          <div class="mb-5 flex items-center justify-between gap-4">
+            <div>
+              <p class="mono text-xs font-black uppercase tracking-[0.25em] text-black/55">PLAN.claude-opus-4-8.md</p>
+              <h3 class="display mt-1 text-4xl font-black">The Safe Reactor</h3>
+            </div>
+            <div class="grid h-16 w-16 place-items-center rounded-full border-2 border-black bg-[#ff8b3d] text-3xl shadow-[4px_4px_0_rgba(0,0,0,.85)]">Ω</div>
+          </div>
+          <p class="text-lg font-semibold leading-relaxed">A distinctive, opinionated plan that makes <b>Cognition</b> the spine: a manufactured flow/buffer consumed by analysis and potentially mapped to real LLM budget. It protects the live server by making RCON via a separate Deployment the primary production path.</p>
+          <div class="mt-6 grid gap-3 sm:grid-cols-2">
+            <div class="tag p-3"><b>Primary posture</b><br><span class="text-sm">Infrastructure safety first</span></div>
+            <div class="tag p-3"><b>MVP</b><br><span class="text-sm">Phases 1–4: Core, snapshots, Cognition, Pi read-only</span></div>
+            <div class="tag p-3"><b>Signature idea</b><br><span class="text-sm">In-game Cognition gates real assistant spend</span></div>
+            <div class="tag p-3"><b>Transport</b><br><span class="text-sm">RCON-first; UDP deferred until justified</span></div>
+          </div>
+        </article>
+
+        <article class="machine-card gpt-bg gpt-border p-7">
+          <div class="mb-5 flex items-center justify-between gap-4">
+            <div>
+              <p class="mono text-xs font-black uppercase tracking-[0.25em] text-black/55">PLAN.gpt-5.5.md</p>
+              <h3 class="display mt-1 text-4xl font-black">The Systems Foundry</h3>
+            </div>
+            <div class="grid h-16 w-16 place-items-center rounded-full border-2 border-black bg-[#4dd7ff] text-3xl shadow-[4px_4px_0_rgba(0,0,0,.85)]">Σ</div>
+          </div>
+          <p class="text-lg font-semibold leading-relaxed">A structured, buildable plan with a strong product taxonomy: Field Station, Datacenter Core, compute machines, capacity types, test strategy, and a longer staged route from RCON/file prototype to optional UDP sidecar.</p>
+          <div class="mt-6 grid gap-3 sm:grid-cols-2">
+            <div class="tag p-3"><b>Primary posture</b><br><span class="text-sm">Contract and product systems first</span></div>
+            <div class="tag p-3"><b>MVP</b><br><span class="text-sm">Phase 4: Bridge + read-only Pi MVP</span></div>
+            <div class="tag p-3"><b>Signature idea</b><br><span class="text-sm">Capacity model: scan, attention, memory, planning</span></div>
+            <div class="tag p-3"><b>Transport</b><br><span class="text-sm">Staged RCON/file → Deployment → UDP sidecar</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="radar" class="print-break mb-16 dark-panel p-7 md:p-9">
+      <div class="grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+        <div>
+          <p class="mono text-xs font-black uppercase tracking-[0.28em] text-[#e28f3f]">02 / Comparative signal</p>
+          <h2 class="display mt-2 text-5xl font-black md:text-6xl">Plan radar</h2>
+          <p class="mt-5 text-lg font-semibold leading-relaxed text-[#f6f0df]/78">Subjective scores derived from the two plans, useful for seeing emphasis rather than declaring a winner. Claude peaks on infra safety and concept distinctiveness; GPT peaks on system completeness and testability.</p>
+          <div class="mt-7 flex flex-wrap gap-3 text-xs font-black uppercase tracking-[0.16em]">
+            <span class="rounded-full border border-[#ff8b3d] px-3 py-1 text-[#ffb178]">Claude Opus</span>
+            <span class="rounded-full border border-[#4dd7ff] px-3 py-1 text-[#9eeeff]">GPT-5.5</span>
+          </div>
+        </div>
+
+        <div class="rounded-3xl border-2 border-[#f6f0df]/50 bg-[#f6f0df] p-4 shadow-[6px_6px_0_rgba(0,0,0,.55)]">
+          <svg viewBox="0 0 620 470" class="h-auto w-full" role="img" aria-label="Radar chart comparing Claude Opus and GPT-5.5 plans">
+            <g transform="translate(310 230)">
+              <polygon class="radar-grid" points="0,-170 147,-85 147,85 0,170 -147,85 -147,-85" />
+              <polygon class="radar-grid" points="0,-128 110,-64 110,64 0,128 -110,64 -110,-64" />
+              <polygon class="radar-grid" points="0,-85 74,-43 74,43 0,85 -74,43 -74,-43" />
+              <polygon class="radar-grid" points="0,-43 37,-21 37,21 0,43 -37,21 -37,-21" />
+              <line x1="0" y1="0" x2="0" y2="-180" stroke="rgba(11,16,20,.17)"/>
+              <line x1="0" y1="0" x2="156" y2="-90" stroke="rgba(11,16,20,.17)"/>
+              <line x1="0" y1="0" x2="156" y2="90" stroke="rgba(11,16,20,.17)"/>
+              <line x1="0" y1="0" x2="0" y2="180" stroke="rgba(11,16,20,.17)"/>
+              <line x1="0" y1="0" x2="-156" y2="90" stroke="rgba(11,16,20,.17)"/>
+              <line x1="0" y1="0" x2="-156" y2="-90" stroke="rgba(11,16,20,.17)"/>
+
+              <!-- Scores /5 converted to radius: Claude [5,5,4.5,4,4.5,4], GPT [4,4,5,4.5,5,5] -->
+              <polygon class="radar-opus" points="0,-170 147,-85 132,76 0,136 -132,76 -118,-68" />
+              <polygon class="radar-gpt" points="0,-136 118,-68 147,85 0,153 -147,85 -147,-85" />
+              <circle cx="0" cy="-170" r="5" fill="#d65f1f"/><circle cx="147" cy="-85" r="5" fill="#d65f1f"/><circle cx="132" cy="76" r="5" fill="#d65f1f"/><circle cx="0" cy="136" r="5" fill="#d65f1f"/><circle cx="-132" cy="76" r="5" fill="#d65f1f"/><circle cx="-118" cy="-68" r="5" fill="#d65f1f"/>
+              <circle cx="0" cy="-136" r="5" fill="#168db0"/><circle cx="118" cy="-68" r="5" fill="#168db0"/><circle cx="147" cy="85" r="5" fill="#168db0"/><circle cx="0" cy="153" r="5" fill="#168db0"/><circle cx="-147" cy="85" r="5" fill="#168db0"/><circle cx="-147" cy="-85" r="5" fill="#168db0"/>
+            </g>
+            <text class="axis-label" x="310" y="28" text-anchor="middle">INFRA SAFETY</text>
+            <text class="axis-label" x="540" y="118" text-anchor="middle">GAMEPLAY NOVELTY</text>
+            <text class="axis-label" x="546" y="360" text-anchor="middle">SYSTEM COMPLETENESS</text>
+            <text class="axis-label" x="310" y="455" text-anchor="middle">PI WORKSTREAM</text>
+            <text class="axis-label" x="76" y="360" text-anchor="middle">TESTABILITY</text>
+            <text class="axis-label" x="72" y="118" text-anchor="middle">K8S PRECISION</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-2xl border border-[#f6f0df]/30 bg-white/5 p-4"><b class="text-[#ffb178]">Claude spike:</b><br><span class="text-sm text-[#f6f0df]/75">Strongest on blast-radius minimization and making the game mechanic also solve real LLM cost control.</span></div>
+        <div class="rounded-2xl border border-[#f6f0df]/30 bg-white/5 p-4"><b class="text-[#9eeeff]">GPT spike:</b><br><span class="text-sm text-[#f6f0df]/75">Strongest on entity taxonomy, test scaffolding, and a modular phase sequence.</span></div>
+        <div class="rounded-2xl border border-[#f6f0df]/30 bg-white/5 p-4"><b class="text-[#b8ff4d]">Shared baseline:</b><br><span class="text-sm text-[#f6f0df]/75">Mod owns truth, bridge narrows transport, Pi provides safe operator cockpit.</span></div>
+      </div>
+    </section>
+
+    <section id="timeline" class="print-break mb-16">
+      <div class="mb-6">
+        <p class="mono text-xs font-black uppercase tracking-[0.28em] text-black/50">03 / Build sequencing</p>
+        <h2 class="display text-5xl font-black md:text-6xl">Phase timeline</h2>
+        <p class="mt-3 max-w-3xl text-lg font-semibold text-black/70">Both plans land the first true MVP at a read-only Pi advisor connected through RCON. They differ in how early datacenter mechanics become real and when cluster hardening enters.</p>
+      </div>
+
+      <div class="overflow-hidden rounded-3xl border-2 border-black/70 bg-white/25 shadow-[7px_7px_0_rgba(0,0,0,.8)]">
+        <div class="grid grid-cols-[8rem_repeat(10,minmax(7.5rem,1fr))] text-sm font-bold">
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">Plan</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">0</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">1</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">2</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">3</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">4</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">5</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">6</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">7</div>
+          <div class="border-b border-r border-black/25 bg-black p-3 text-[#f6f0df]">8</div>
+          <div class="border-b border-black/25 bg-black p-3 text-[#f6f0df]">9/10</div>
+
+          <div class="border-r border-black/25 bg-[#ff8b3d]/30 p-3 font-black">Claude</div>
+          <div class="phase-cell p-3">Scaffold + contract</div>
+          <div class="phase-cell phase-mvp p-3">Core + worksite</div>
+          <div class="phase-cell phase-mvp p-3">Snapshots + diagnostics</div>
+          <div class="phase-cell phase-mvp p-3">Cognition economy</div>
+          <div class="phase-cell phase-mvp p-3"><b>Read-only Pi MVP</b></div>
+          <div class="phase-cell phase-post p-3">Watches + alerts</div>
+          <div class="phase-cell phase-post p-3">Planner + ledger</div>
+          <div class="phase-cell phase-post p-3">Multi-core + fluids</div>
+          <div class="phase-cell phase-hard p-3">K8s bridge Deployment</div>
+          <div class="phase-cell p-3 text-black/45">—</div>
+
+          <div class="border-r border-black/25 bg-[#4dd7ff]/30 p-3 font-black">GPT</div>
+          <div class="phase-cell p-3">Contract + skeleton</div>
+          <div class="phase-cell phase-mvp p-3">Field Station</div>
+          <div class="phase-cell phase-mvp p-3">Basic datacenter capacity</div>
+          <div class="phase-cell phase-mvp p-3">Site reports</div>
+          <div class="phase-cell phase-mvp p-3"><b>Bridge + Pi MVP</b></div>
+          <div class="phase-cell phase-post p-3">Watches + history</div>
+          <div class="phase-cell phase-post p-3">Planner ledger</div>
+          <div class="phase-cell phase-post p-3">Ghosts + blueprints</div>
+          <div class="phase-cell phase-post p-3">Rich datacenter mechanics</div>
+          <div class="phase-cell phase-hard p-3">K8s hardening + UDP</div>
+        </div>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-3 text-xs font-black uppercase tracking-[0.16em]">
+        <span class="tag px-3 py-1"><span class="inline-block h-3 w-3 bg-[#b8ff4d]/50 align-middle"></span> MVP scope</span>
+        <span class="tag px-3 py-1"><span class="inline-block h-3 w-3 bg-[#e28f3f]/50 align-middle"></span> Post-MVP capability</span>
+        <span class="tag px-3 py-1"><span class="inline-block h-3 w-3 bg-[#4dd7ff]/50 align-middle"></span> Cluster hardening</span>
+      </div>
+    </section>
+
+    <section id="architecture" class="print-break mb-16 dark-panel p-7 md:p-9">
+      <p class="mono text-xs font-black uppercase tracking-[0.28em] text-[#b8ff4d]">04 / Shared architecture</p>
+      <h2 class="display mt-2 text-5xl font-black md:text-6xl">The three-layer machine</h2>
+      <p class="mt-4 max-w-4xl text-lg font-semibold leading-relaxed text-[#f6f0df]/78">Both plans converge on a safety-preserving split. The decisive architectural insight is that Pi, bridge, and mod each get one job — and only the mod can touch the world.</p>
+
+      <div class="mt-9 grid items-center gap-4 lg:grid-cols-[1fr_auto_1fr_auto_1fr]">
+        <div class="flow-node rounded-3xl p-6">
+          <p class="mono text-xs font-black uppercase tracking-[0.2em] text-[#9eeeff]">Layer 1</p>
+          <h3 class="display mt-2 text-3xl font-black">Pi extension</h3>
+          <ul class="mt-4 space-y-2 text-sm font-semibold text-[#f6f0df]/78">
+            <li>Read-only LLM tools</li>
+            <li>Status widgets + commands</li>
+            <li>Human approval UI</li>
+            <li>No RCON/game authority</li>
+          </ul>
+        </div>
+        <div class="flow-line hidden w-14 lg:block"></div>
+        <div class="flow-node rounded-3xl p-6">
+          <p class="mono text-xs font-black uppercase tracking-[0.2em] text-[#ffb178]">Layer 2</p>
+          <h3 class="display mt-2 text-3xl font-black">Bridge</h3>
+          <ul class="mt-4 space-y-2 text-sm font-semibold text-[#f6f0df]/78">
+            <li>Narrow HTTP/SSE API</li>
+            <li>RCON adapter + report cache</li>
+            <li>Intent validation + metrics</li>
+            <li>Secrets stay here / Kubernetes</li>
+          </ul>
+        </div>
+        <div class="flow-line hidden w-14 lg:block"></div>
+        <div class="flow-node rounded-3xl p-6">
+          <p class="mono text-xs font-black uppercase tracking-[0.2em] text-[#b8ff4d]">Layer 3</p>
+          <h3 class="display mt-2 text-3xl font-black">Factorio mod</h3>
+          <ul class="mt-4 space-y-2 text-sm font-semibold text-[#f6f0df]/78">
+            <li>Authoritative world state</li>
+            <li>Zone scans + diagnostics</li>
+            <li>Cognition simulation</li>
+            <li>Apply-time validation</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="comparison" class="print-break mb-16">
+      <div class="mb-6">
+        <p class="mono text-xs font-black uppercase tracking-[0.28em] text-black/50">05 / Detailed comparison</p>
+        <h2 class="display text-5xl font-black md:text-6xl">Where they agree, where they compete</h2>
+      </div>
+
+      <div class="overflow-hidden rounded-3xl border-2 border-black/70 bg-[#f6f0df]/78 shadow-[7px_7px_0_rgba(0,0,0,.8)]">
+        <table class="w-full border-collapse text-left text-sm">
+          <thead class="bg-black text-[#f6f0df]">
+            <tr>
+              <th class="w-[18%] p-4">Dimension</th>
+              <th class="w-[27%] p-4 text-[#ffb178]">Claude Opus 4.8</th>
+              <th class="w-[27%] p-4 text-[#9eeeff]">GPT-5.5</th>
+              <th class="p-4 text-[#b8ff4d]">Best synthesis</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-black/15 font-semibold">
+            <tr>
+              <td class="p-4 font-black">Transport</td>
+              <td class="p-4">Declares RCON via separate Deployment the primary path; UDP deferred behind explicit justification.</td>
+              <td class="p-4">Uses staged adapters: RCON/file prototype, in-cluster Deployment, later UDP sidecar with reliability envelope.</td>
+              <td class="p-4">Adopt Claude's default and GPT's adapter abstraction; keep UDP as a documented future option, not MVP.</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-black">Gameplay object model</td>
+              <td class="p-4">Two scarcities: Cogigator Core for Sightline and Datacenter for Cognition.</td>
+              <td class="p-4">Three families: Field Station, Datacenter Core, compute-producing machines.</td>
+              <td class="p-4">Use GPT's naming clarity with Claude's two-scarcity fiction.</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-black">Industrial cognition</td>
+              <td class="p-4">Cognition as flow + buffer; Memory Banks become physical context window; compute gates model depth/spend.</td>
+              <td class="p-4">Capacity model: scan, attention, memory, planning; multi-fluid compute staged for late game.</td>
+              <td class="p-4">Model the player UI around four capacities, but retain the memorable Cognition economy metaphor.</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-black">Pi extension</td>
+              <td class="p-4">Very Pi-native: exact extension location, lifecycle warnings, fail-closed approval command flow.</td>
+              <td class="p-4">Clear commands/tools/UI/resilience checklist and test expectations.</td>
+              <td class="p-4">Combine both: lifecycle discipline plus explicit command/tool set and stub-bridge tests.</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-black">Kubernetes</td>
+              <td class="p-4">Most precise about current infra, ArgoCD, NetworkPolicy, resource limits, and avoiding StatefulSet edits.</td>
+              <td class="p-4">Strong operational deployment path and readiness/metrics/documentation tasks.</td>
+              <td class="p-4">No persistent cluster mutation until Phase 4 passes; then GitOps-managed bridge Deployment.</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-black">Testing</td>
+              <td class="p-4">Risk-driven gates around UPS, diagnostics, and citations.</td>
+              <td class="p-4">Explicit mod, bridge, Pi, and integration test categories.</td>
+              <td class="p-4">Use GPT's test taxonomy and Claude's UPS/citation release gates.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="print-break mb-16 grid gap-6 lg:grid-cols-2">
+      <div class="machine-card p-7">
+        <p class="mono text-xs font-black uppercase tracking-[0.28em] text-black/50">06 / Datacenter gameplay</p>
+        <h2 class="display mt-2 text-4xl font-black">Manufactured cognition stack</h2>
+        <p class="mt-4 font-semibold leading-relaxed text-black/70">The plans turn AI capability into a factory problem. The player builds and cools the brain, then spends that brain on observation, history, watches, and plans.</p>
+        <div class="mt-6 space-y-4">
+          <div>
+            <div class="mb-1 flex justify-between text-xs font-black uppercase tracking-[0.16em]"><span>Scan capacity</span><span>Area / freshness</span></div>
+            <div class="bar-track h-5 rounded-full p-1"><div class="bar-gpt h-full w-[78%] rounded-full"></div></div>
+          </div>
+          <div>
+            <div class="mb-1 flex justify-between text-xs font-black uppercase tracking-[0.16em]"><span>Attention</span><span>Stations / watches</span></div>
+            <div class="bar-track h-5 rounded-full p-1"><div class="bar-opus h-full w-[70%] rounded-full"></div></div>
+          </div>
+          <div>
+            <div class="mb-1 flex justify-between text-xs font-black uppercase tracking-[0.16em]"><span>Memory</span><span>History / context</span></div>
+            <div class="bar-track h-5 rounded-full p-1"><div class="bar-gpt h-full w-[62%] rounded-full"></div></div>
+          </div>
+          <div>
+            <div class="mb-1 flex justify-between text-xs font-black uppercase tracking-[0.16em]"><span>Planning</span><span>Intent generation</span></div>
+            <div class="bar-track h-5 rounded-full p-1"><div class="bar-opus h-full w-[54%] rounded-full"></div></div>
+          </div>
+        </div>
+        <p class="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-black/45">Bars represent relative design emphasis in the combined concept, not measured values.</p>
+      </div>
+
+      <div class="machine-card p-7">
+        <p class="mono text-xs font-black uppercase tracking-[0.28em] text-black/50">07 / Transport calculus</p>
+        <h2 class="display mt-2 text-4xl font-black">Why RCON wins first</h2>
+        <div class="mt-6 grid gap-3">
+          <div class="grid grid-cols-[8rem_1fr] items-center gap-3">
+            <b>RCON</b><div class="bar-track h-8 rounded-full p-1"><div class="bar-opus grid h-full w-[92%] place-items-center rounded-full text-xs font-black text-black">lowest blast radius</div></div>
+          </div>
+          <div class="grid grid-cols-[8rem_1fr] items-center gap-3">
+            <b>File trace</b><div class="bar-track h-8 rounded-full p-1"><div class="bar-gpt grid h-full w-[68%] place-items-center rounded-full text-xs font-black text-black">great fixtures</div></div>
+          </div>
+          <div class="grid grid-cols-[8rem_1fr] items-center gap-3">
+            <b>UDP sidecar</b><div class="bar-track h-8 rounded-full p-1"><div class="bar-opus grid h-full w-[36%] place-items-center rounded-full text-xs font-black text-black">later, if needed</div></div>
+          </div>
+          <div class="grid grid-cols-[8rem_1fr] items-center gap-3">
+            <b>Public ingress</b><div class="bar-track h-8 rounded-full p-1"><div class="grid h-full w-[8%] place-items-center rounded-full bg-red-800 text-xs font-black text-white">no</div></div>
+          </div>
+        </div>
+        <p class="mt-5 font-semibold leading-relaxed text-black/70">The existing cluster already has in-cluster RCON, ArgoCD, sealed secrets, and monitoring. A separate bridge Deployment is additive; a UDP sidecar requires changing the critical Factorio StatefulSet.</p>
+      </div>
+    </section>
+
+    <section id="risks" class="print-break mb-16">
+      <div class="mb-6">
+        <p class="mono text-xs font-black uppercase tracking-[0.28em] text-black/50">08 / Risk heatmap</p>
+        <h2 class="display text-5xl font-black md:text-6xl">Known failure modes</h2>
+      </div>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="risk-high rounded-3xl border-2 border-black p-5 shadow-[5px_5px_0_rgba(0,0,0,.75)]"><b>UPS degradation</b><p class="mt-2 text-sm opacity-80">Tick-spread scans, entity caps, omitted-data markers, and Cognition overload states.</p></div>
+        <div class="risk-high rounded-3xl border-2 border-black p-5 shadow-[5px_5px_0_rgba(0,0,0,.75)]"><b>Unsafe mutation</b><p class="mt-2 text-sm opacity-80">Default read-only, inert intents, bridge + mod validation, in-game ledger, fail closed.</p></div>
+        <div class="risk-high rounded-3xl border-2 border-black p-5 shadow-[5px_5px_0_rgba(0,0,0,.75)]"><b>Secret leakage</b><p class="mt-2 text-sm opacity-80">SealedSecrets only. No tokens in mod, Pi config, sessions, logs, or docs.</p></div>
+        <div class="risk-med rounded-3xl border-2 border-black p-5 shadow-[5px_5px_0_rgba(0,0,0,.75)]"><b>Datacenter feels like a tax</b><p class="mt-2 text-sm opacity-80">Make compute feedback visible, rewarding, tunable, and avoid fluid complexity in MVP.</p></div>
+        <div class="risk-med rounded-3xl border-2 border-black p-5 shadow-[5px_5px_0_rgba(0,0,0,.75)]"><b>RCON limits</b><p class="mt-2 text-sm opacity-80">Derived compact snapshots, chunking, file-output replay, transport adapter abstraction.</p></div>
+        <div class="risk-med rounded-3xl border-2 border-black p-5 shadow-[5px_5px_0_rgba(0,0,0,.75)]"><b>Multiplayer authority</b><p class="mt-2 text-sm opacity-80">Define force ceilings, approval roles, audit entries before Planner mode ships.</p></div>
+      </div>
+    </section>
+
+    <section id="synthesis" class="print-break mb-16 dark-panel p-7 md:p-9">
+      <p class="mono text-xs font-black uppercase tracking-[0.28em] text-[#e28f3f]">09 / Recommended route</p>
+      <h2 class="display mt-2 text-5xl font-black md:text-6xl">Synthesis blueprint</h2>
+      <div class="mt-8 grid gap-6 lg:grid-cols-3">
+        <div class="rounded-3xl border border-[#f6f0df]/30 bg-white/5 p-6">
+          <div class="mb-4 grid h-12 w-12 place-items-center rounded-full bg-[#ff8b3d] text-2xl font-black text-black">1</div>
+          <h3 class="display text-3xl font-black">Build the safe spine</h3>
+          <p class="mt-3 text-sm font-semibold leading-relaxed text-[#f6f0df]/75">Use RCON/file fixtures and no persistent cluster mutation. Get the mod scaffold, station/core lifecycle, bounded worksite, and deterministic diagnostics working locally.</p>
+        </div>
+        <div class="rounded-3xl border border-[#f6f0df]/30 bg-white/5 p-6">
+          <div class="mb-4 grid h-12 w-12 place-items-center rounded-full bg-[#4dd7ff] text-2xl font-black text-black">2</div>
+          <h3 class="display text-3xl font-black">Make thought physical</h3>
+          <p class="mt-3 text-sm font-semibold leading-relaxed text-[#f6f0df]/75">Ship a simple capacity model early: scan, attention, memory, planning. Let datacenter machines visibly improve freshness and diagnostic depth before adding complex fluids.</p>
+        </div>
+        <div class="rounded-3xl border border-[#f6f0df]/30 bg-white/5 p-6">
+          <div class="mb-4 grid h-12 w-12 place-items-center rounded-full bg-[#b8ff4d] text-2xl font-black text-black">3</div>
+          <h3 class="display text-3xl font-black">Open the Pi cockpit</h3>
+          <p class="mt-3 text-sm font-semibold leading-relaxed text-[#f6f0df]/75">Add the project-local Pi extension with status, snapshot, and analyze tools. Keep approvals as explicit commands and UI, not autonomous LLM tools.</p>
+        </div>
+      </div>
+
+      <div class="mt-8 rounded-3xl border-2 border-[#b8ff4d]/70 bg-[#b8ff4d]/10 p-6">
+        <h3 class="display text-4xl font-black text-[#dfff9d]">Best combined MVP</h3>
+        <p class="mt-3 max-w-5xl text-lg font-semibold leading-relaxed text-[#f6f0df]/82">A player builds a Field Station/Core and a minimal datacenter. The station observes a visible rectangle, consumes manufactured capacity, produces deterministic bounded reports, and Pi answers “why is this stalled?” with station/tick/finding citations. No world mutation. No permanent cluster change. The concept proves locality, grounding, physical cognition, and operator safety in one loop.</p>
+      </div>
+    </section>
+
+    <footer class="border-t-2 border-black/70 pt-8 text-sm font-bold text-black/58">
+      <p>Generated from <span class="mono">PLAN.claude-opus-4-8.md</span> and <span class="mono">PLAN.gpt-5.5.md</span>. Sources also referenced by the plans: <span class="mono">CONCEPT_BRIEF.md</span>, <span class="mono">INFRASTRUCTURE.md</span>, and <span class="mono">PI.md</span>.</p>
+      <p class="mt-2">Design note: self-contained HTML with inline CSS/SVG and Tailwind browser CDN.</p>
+    </footer>
+  </main>
+</body>
+</html>
