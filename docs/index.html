@@ -244,10 +244,10 @@
       into two competing implementation plans.
     </p>
     <div class="hero-meta">
-      <span class="chip"><b>7</b> commits</span>
+      <span class="chip"><b>10</b> commits before first push</span>
       <span class="chip">single-day sprint · <b>2026-06-26</b></span>
-      <span class="chip">concept → constraints → <b>plan duel</b></span>
-      <span class="chip">no code yet · engineering direction</span>
+      <span class="chip">concept → constraints → <b>plan duel</b> → publication</span>
+      <span class="chip">no mod code yet · engineering direction</span>
     </div>
   </div>
 </header>
@@ -257,9 +257,10 @@
   <div class="wrap">
     <span class="kicker">01 / The assembly line</span>
     <h2>How the idea was built, step by step</h2>
-    <p class="lede">Each commit added one load-bearing document. Read in order, they form a
-      deliberate funnel: from open creative brief, to the hard edges of a real Kubernetes cluster,
-      to the tooling harness, to two rival blueprints — and finally a head-to-head report.</p>
+    <p class="lede">Each commit added one load-bearing document or publication artifact. Read in
+      order, they form a deliberate funnel: from open creative brief, to the hard edges of a real
+      Kubernetes cluster, to the tooling harness, to two rival blueprints, to a head-to-head report,
+      and finally to a public development journal.</p>
 
     <div class="timeline">
       <div class="rail"></div>
@@ -390,6 +391,61 @@
             a standalone, polished artifact worth opening full-screen.</p>
           <div class="reads">
             <a href="../PLAN_REPORT.html"><span class="arr">▸</span> Open the plan duel report</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="node">08</div>
+        <div class="card">
+          <div class="commit-row">
+            <span class="hash">43e0bff</span>
+            <span class="date">2026-06-26</span>
+            <span class="file-pill">docs/index.html</span>
+          </div>
+          <h3>Turn the work log into a GitHub Pages timeline</h3>
+          <p>The process became part of the artifact. A self-contained, public-safe timeline page
+            reframed the AI-assisted ideation as an assembly line: safeguards, concept, infra, Pi,
+            rival plans, and synthesis. The page links back to the source documents instead of
+            duplicating their contents.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="node">09</div>
+        <div class="card">
+          <div class="commit-row">
+            <span class="hash">d18912e</span>
+            <span class="date">2026-06-26</span>
+            <span class="file-pill">.github/workflows/pages.yml</span>
+          </div>
+          <h3>Add an explicit GitHub Pages publishing workflow</h3>
+          <p>Instead of relying on implicit branch/folder settings, the repo gained a small Actions
+            workflow that assembles a <code>_site</code> artifact. It copies this timeline plus the
+            linked root resources, so the <code>docs/</code> page can keep clean relative links while
+            Pages deploys from GitHub Actions.</p>
+          <div class="reads">
+            <a href="https://github.com/mtrenker/cogigator/blob/main/.github/workflows/pages.yml"><span class="arr">▸</span> Inspect the Pages workflow</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="node">10</div>
+        <div class="card">
+          <div class="commit-row">
+            <span class="hash">pre-push</span>
+            <span class="date">2026-06-26</span>
+            <span class="file-pill">publication setup</span>
+          </div>
+          <h3>Create the public GitHub repository and enable Pages</h3>
+          <p>The local history was prepared for publication before the first push: <code>gh</code>
+            created <b>mtrenker/cogigator</b> as a public repository, GitHub Pages was configured to
+            deploy from Actions, and this timeline was refreshed one last time so the published site
+            records how it came to exist.</p>
+          <div class="reads">
+            <a href="https://github.com/mtrenker/cogigator"><span class="arr">▸</span> Open the GitHub repository</a>
+            <a href="https://mtrenker.github.io/cogigator/"><span class="arr">▸</span> Open the published site</a>
           </div>
         </div>
       </div>
