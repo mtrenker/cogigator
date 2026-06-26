@@ -1,0 +1,34 @@
+# Local secrets and environment
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Pi local runtime/config; project extensions can be committed explicitly later
+.pi/*.json
+.pi/**/local.*
+.pi/**/secrets.*
+
+# Node / web tooling
+node_modules/
+dist/
+build/
+.cache/
+.vite/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Kubernetes / local cluster artifacts
+kubeconfig*
+*.kubeconfig
+
+# Editor
+.idea/
+.vscode/
