@@ -28,15 +28,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p _site/docs
+          mkdir -p _site
           cp index.html _site/index.html
-          cp docs/index.html _site/docs/index.html
+          cp -R docs _site/docs
           cp CONCEPT_BRIEF.md _site/CONCEPT_BRIEF.md
           cp INFRASTRUCTURE.md _site/INFRASTRUCTURE.md
           cp PI.md _site/PI.md
           cp PLAN.claude-opus-4-8.md _site/PLAN.claude-opus-4-8.md
           cp PLAN.gpt-5.5.md _site/PLAN.gpt-5.5.md
           cp PLAN_REPORT.html _site/PLAN_REPORT.html
+          cp AB_TEST_FRAMEWORK.md _site/AB_TEST_FRAMEWORK.md
           touch _site/.nojekyll
 
       - name: Upload Pages artifact
