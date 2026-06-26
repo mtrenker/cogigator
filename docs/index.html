@@ -469,6 +469,27 @@
         </div>
       </div>
 
+      <div class="step">
+        <div class="node">12</div>
+        <div class="card">
+          <div class="commit-row">
+            <span class="hash">safety</span>
+            <span class="date">2026-06-26</span>
+            <span class="file-pill">pre-agent boundary</span>
+          </div>
+          <h3>Clarify what happens before agents start</h3>
+          <p>Before launching the fleet, the operational boundary was made explicit: implementing
+            <code>PLAN.md</code> should add repo-local scaffolding, fixtures, a local bridge stub, and
+            a project Pi extension only. It should <b>not</b> change firewall settings, restart the
+            Factorio server, touch Kubernetes, edit Pacabytes infra repos, expose RCON, add live mods,
+            or mutate a world. The only expected local side effects are running a localhost bridge and
+            trusting/reloading the project Pi extension.</p>
+          <div class="reads">
+            <a href="../PLAN.md"><span class="arr">▸</span> Check the read-only spike scope</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
