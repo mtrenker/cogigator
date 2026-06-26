@@ -279,7 +279,7 @@ Do not include actual secret material or sensitive runtime output.
 
 ## Current next step
 
-The recommended next step is to execute [`../FLEET_PLAN.md`](../FLEET_PLAN.md), the fleet-compatible plan for the first A/B implementation:
+The recommended next step is to execute [`../PLAN.md`](../PLAN.md), the fleet-compatible plan for the first A/B implementation:
 
 - build the shared substrate;
 - implement Variant A: Sightline + Cognition Flow;

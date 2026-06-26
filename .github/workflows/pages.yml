@@ -39,7 +39,7 @@ jobs:
           cp PLAN.gpt-5.5.md _site/PLAN.gpt-5.5.md
           cp PLAN_REPORT.html _site/PLAN_REPORT.html
           cp AB_TEST_FRAMEWORK.md _site/AB_TEST_FRAMEWORK.md
-          cp FLEET_PLAN.md _site/FLEET_PLAN.md
+          cp PLAN.md _site/PLAN.md
           touch _site/.nojekyll
 
       - name: Upload Pages artifact

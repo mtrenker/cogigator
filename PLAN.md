@@ -62,7 +62,7 @@ bridge/
 docs/experiments/2026-06-26-industrial-cognition-ab.md
 ```
 
-Final language/framework choices for `bridge/` may be selected by Task 003. Keep it local-first and dependency-light.
+Final language/framework choices for `bridge/` may be selected by Task 007. Keep it local-first and dependency-light.
 
 ## Challenges & tradeoffs
 
@@ -107,7 +107,7 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **thinking**: high
 - **agent**: worker
 - **depends**: 001, 002
-- **description**: Add `factorio-mod/cogigator/scripts/variants/cognition-flow.lua` and any variant-specific locale entries needed for the Claude-inspired Sightline + Cognition Flow interpretation. Build on Task 002's variant registry and expose a pure-data variant descriptor plus capacity/degradation functions for `sightline`, `cognitionFlow`, `cognitionBuffer`, `memory`, and `overloaded`; acceptance criterion is that the common substrate can select this variant and produce variant metadata without changing common report code.
+- **description**: Add `factorio-mod/cogigator/scripts/variants/cognition-flow.lua` and any variant-specific locale entries needed for the Claude-inspired Sightline + Cognition Flow interpretation. Use Task 001's contract for field names and build on Task 002's variant registry to expose a pure-data variant descriptor plus capacity/degradation functions for `sightline`, `cognitionFlow`, `cognitionBuffer`, `memory`, and `overloaded`; acceptance criterion is that the common substrate can select this variant and produce variant metadata without changing common report code.
 
 ### Task 005: Implement Variant B — Field Station + Capacity Vector module
 
@@ -116,7 +116,7 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **thinking**: medium
 - **agent**: worker
 - **depends**: 001, 002
-- **description**: Add `factorio-mod/cogigator/scripts/variants/capacity-vector.lua` and any variant-specific locale entries needed for the GPT-inspired Field Station + Capacity Vector interpretation. Build on Task 002's variant registry and expose a pure-data variant descriptor plus capacity/degradation functions for `scan`, `attention`, `memory`, and `planning`; acceptance criterion is that the common substrate can select this variant and produce variant metadata without changing common report code.
+- **description**: Add `factorio-mod/cogigator/scripts/variants/capacity-vector.lua` and any variant-specific locale entries needed for the GPT-inspired Field Station + Capacity Vector interpretation. Use Task 001's contract for field names and build on Task 002's variant registry to expose a pure-data variant descriptor plus capacity/degradation functions for `scan`, `attention`, `memory`, and `planning`; acceptance criterion is that the common substrate can select this variant and produce variant metadata without changing common report code.
 
 ### Task 006: Implement common report generation against variant interfaces
 
@@ -124,8 +124,8 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **profile**: deep
 - **thinking**: high
 - **agent**: worker
-- **depends**: 002, 004, 005
-- **description**: Implement `scripts/common/reports.lua`, `scripts/common/findings.lua`, and `scripts/common/metrics.lua` so they call the selected variant module through the shared interface and emit the Task 001 snapshot shape. For the spike, reports may use synthetic in-mod data or fixture-like deterministic tables rather than live entity scans; acceptance criterion is that both Variant A and Variant B produce comparable reports with different capacity/degradation explanations and identical finding vocabulary. ⚠ skipped (spike): full `surface.find_entities_filtered` scanning and UPS tuning.
+- **depends**: 001, 002, 004, 005
+- **description**: Implement `scripts/common/reports.lua`, `scripts/common/findings.lua`, and `scripts/common/metrics.lua` so they call the selected variant module through the shared interface and emit the Task 001 snapshot shape. Use Task 002's common module layout plus the variant interfaces from Task 004 and Task 005; acceptance criterion is that both Variant A and Variant B produce comparable reports with different capacity/degradation explanations and identical finding vocabulary. For the spike, reports may use synthetic in-mod data or fixture-like deterministic tables rather than live entity scans. ⚠ skipped (spike): full `surface.find_entities_filtered` scanning and UPS tuning.
 
 ### Task 007: Create local bridge stub with variant-agnostic API
 
@@ -134,7 +134,7 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **thinking**: medium
 - **agent**: worker
 - **depends**: 001, 003
-- **description**: Implement a lightweight local bridge under `bridge/` with endpoints `GET /health`, `GET /version`, `GET /experiments/current`, `GET /scenarios`, `GET /snapshot?scenarioId=...&variantId=...`, and `POST /analyze`. Use Task 003's fixtures as the backing store and keep the API variant-agnostic; acceptance criterion is that `curl` can retrieve both variants for each shared scenario and `/analyze` returns deterministic cited findings, not LLM output. ⚠ skipped (spike): RCON, Kubernetes deployment, authentication, and provider API calls.
+- **description**: Implement a lightweight local bridge under `bridge/` with endpoints `GET /health`, `GET /version`, `GET /experiments/current`, `GET /scenarios`, `GET /snapshot?scenarioId=...&variantId=...`, and `POST /analyze`. Use Task 001's API/snapshot contract and Task 003's fixtures as the backing store, keeping the API variant-agnostic; acceptance criterion is that `curl` can retrieve both variants for each shared scenario and `/analyze` returns deterministic cited findings, not LLM output. ⚠ skipped (spike): RCON, Kubernetes deployment, authentication, and provider API calls.
 
 ### Task 008: Implement variant-agnostic Pi extension tools against the bridge
 
@@ -143,7 +143,7 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **thinking**: high
 - **agent**: worker
 - **depends**: 001, 007
-- **description**: Create `.pi/extensions/cogigator/index.ts` with read-only commands/tools `cogigator_status`, `cogigator_snapshot`, `cogigator_analyze`, `/cogigator-connect`, `/cogigator-status`, `/cogigator-snapshot`, and `/cogigator-experiment`. Use the bridge API from Task 007 and display `experimentId`, `variantId`, scenario, station, tick, findings, and degradation state without encoding variant-specific policy; acceptance criterion is that Pi can query both variants through the same tool path and no tool can mutate game state. ⚠ skipped (spike): approval UI, action intents, event streams, and port-forward management.
+- **description**: Create `.pi/extensions/cogigator/index.ts` with read-only commands/tools `cogigator_status`, `cogigator_snapshot`, `cogigator_analyze`, `/cogigator-connect`, `/cogigator-status`, `/cogigator-snapshot`, and `/cogigator-experiment`. Use Task 001's field contract and the bridge API from Task 007 to display `experimentId`, `variantId`, scenario, station, tick, findings, and degradation state without encoding variant-specific policy; acceptance criterion is that Pi can query both variants through the same tool path and no tool can mutate game state. ⚠ skipped (spike): approval UI, action intents, event streams, and port-forward management.
 
 ### Task 009: Add experiment selection and local demo instructions
 
@@ -152,7 +152,7 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **thinking**: medium
 - **agent**: worker
 - **depends**: 004, 005, 007, 008
-- **description**: Add `docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md` documenting how to run the bridge stub, load/query scenarios, switch between `cognition-flow` and `capacity-vector`, and call the Pi tools. The runbook must include exact local commands and a minimal happy-path transcript for one scenario in both variants; acceptance criterion is that a cold tester can reproduce the A/B loop without reading implementation code.
+- **description**: Add `docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md` documenting how to run the bridge stub from Task 007, load/query the two variant modules from Task 004 and Task 005, switch between `cognition-flow` and `capacity-vector`, and call the Pi tools from Task 008. The runbook must include exact local commands and a minimal happy-path transcript for one scenario in both variants; acceptance criterion is that a cold tester can reproduce the A/B loop without reading implementation code.
 
 ### Task 010: Build scoring worksheet and update experiment record
 
@@ -161,7 +161,7 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **thinking**: high
 - **agent**: worker
 - **depends**: 001, 003, 009
-- **description**: Create `docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md` with the weighted metrics for player comprehension, Factorio-native feel, diagnostic usefulness, degradation clarity, fun/inspiration, implementation friction, and future extensibility. Update `docs/experiments/2026-06-26-industrial-cognition-ab.md` with links to the contract, runbook, and scorecard from Tasks 001 and 009; acceptance criterion is that the experiment can be scored consistently after a demo run.
+- **description**: Create `docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md` with the weighted metrics for player comprehension, Factorio-native feel, diagnostic usefulness, degradation clarity, fun/inspiration, implementation friction, and future extensibility. Use Task 001's scorecard fields, Task 003's scenario IDs, and Task 009's runbook flow, then update `docs/experiments/2026-06-26-industrial-cognition-ab.md` with links to the contract, runbook, and scorecard; acceptance criterion is that the experiment can be scored consistently after a demo run.
 
 ### Task 011: Validate public-safety, file ownership, and variant fairness
 
@@ -170,7 +170,7 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **thinking**: high
 - **agent**: reviewer
 - **depends**: 002, 003, 004, 005, 006, 007, 008, 009, 010
-- **description**: Review the full diff for public-safety issues, secret leakage, accidental mutation paths, and unfair variant coupling. Specifically verify that `.pi/extensions/cogigator/index.ts` is variant-agnostic, the bridge serves the same schema for both variants, common Factorio files do not hard-code one variant's interpretation, and docs contain no secrets or sensitive infrastructure details; acceptance criterion is a written review note in `docs/experiments/2026-06-26-industrial-cognition-ab.review.md` with pass/fail findings.
+- **description**: Review the full diff from Task 002, Task 003, Task 004, Task 005, Task 006, Task 007, Task 008, Task 009, and Task 010 for public-safety issues, secret leakage, accidental mutation paths, and unfair variant coupling. Specifically verify Task 008's `.pi/extensions/cogigator/index.ts` is variant-agnostic, Task 007's bridge serves the same schema for both variants, Task 006's common Factorio report files do not hard-code one variant's interpretation, Task 004 and Task 005 stay inside their variant modules, Task 003 fixtures are public-safe, and Task 009/Task 010 docs contain no secrets or sensitive infrastructure details; acceptance criterion is a written review note in `docs/experiments/2026-06-26-industrial-cognition-ab.review.md` with pass/fail findings.
 
 ### Task 012: Update public timeline and repository onboarding after the spike
 
@@ -187,5 +187,5 @@ Final language/framework choices for `bridge/` may be selected by Task 003. Keep
 - **profile**: balanced
 - **thinking**: medium
 - **agent**: reviewer
-- **depends**: 011, 012
-- **description**: Run the documented local bridge/Pi/demo flow from Task 009 for at least two scenarios and both variants, then fill in the first pass of the scorecard from Task 010. The plan is complete when both variants are selectable through the same bridge/Pi path, the shared reports are comparable, no mutation path exists, docs are updated, and the experiment record states whether the next step is merge, synthesize, iterate, or park. ⚠ skipped (spike): live Kubernetes validation and real Factorio server deployment.
+- **depends**: 009, 010, 011, 012
+- **description**: Run the documented local bridge/Pi/demo flow from Task 009 for at least two scenarios and both variants, then fill in the first pass of the scorecard from Task 010. Use Task 011's review note as the safety gate and Task 012's documentation updates as the publication gate; the plan is complete when both variants are selectable through the same bridge/Pi path, the shared reports are comparable, no mutation path exists, docs are updated, and the experiment record states whether the next step is merge, synthesize, iterate, or park. ⚠ skipped (spike): live Kubernetes validation and real Factorio server deployment.

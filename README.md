@@ -49,7 +49,7 @@ The goal is not only to build a mod. The goal is to show how AI-assisted plannin
 | [`PLAN.gpt-5.5.md`](./PLAN.gpt-5.5.md) | GPT-5.5 implementation plan. |
 | [`PLAN_REPORT.html`](./PLAN_REPORT.html) | Self-contained visual comparison report. |
 | [`AB_TEST_FRAMEWORK.md`](./AB_TEST_FRAMEWORK.md) | Reusable framework for shared-substrate A/B tests. |
-| [`FLEET_PLAN.md`](./FLEET_PLAN.md) | Fleet-compatible implementation plan for the first shared-substrate A/B spike. |
+| [`PLAN.md`](./PLAN.md) | Fleet-compatible implementation plan for the first shared-substrate A/B spike. |
 | [`docs/DEVELOPMENT_PROCESS.md`](./docs/DEVELOPMENT_PROCESS.md) | How the AI-assisted documentation/planning workflow works. |
 | [`docs/experiments/`](./docs/experiments/) | Standardized experiment records. |
 
@@ -124,6 +124,6 @@ Infrastructure may be discussed only at the non-sensitive level already used in 
 
 ## Suggested next step
 
-Execute [`FLEET_PLAN.md`](./FLEET_PLAN.md) as a read-only shared-substrate A/B spike.
+Execute [`PLAN.md`](./PLAN.md) as a read-only shared-substrate A/B spike.
 
 The first implementation milestone should still be read-only: placed observation structure, bounded worksite, deterministic report, bridge snapshot endpoint, Pi status/snapshot tools, and no world mutation.

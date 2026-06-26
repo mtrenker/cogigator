@@ -32,3 +32,6 @@ kubeconfig*
 # Editor
 .idea/
 .vscode/
+
+# Pi runtime task state
+.pi/tasks/
