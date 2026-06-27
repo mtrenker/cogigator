@@ -117,17 +117,17 @@ The synthesis prototype now has two read-only layers:
 - No assistant mutation path exists.
 - Placing/removing the new entity shell is normal player-driven Factorio behavior; Cogigator only observes Field Station placement for status counts.
 - Pi output names the degraded capacity and suggests a factory action.
-- The [manual comprehension probe](2026-06-27-industrial-cognition-synthesis.probe.md) succeeds for at least one degraded scenario.
+- The [manual comprehension probe](2026-06-27-industrial-cognition-synthesis.probe.md) succeeds for at least one degraded scenario. Completed as MT self-probe; a second-person probe remains useful before broader UX claims.
 - The scorecard can be updated without inventing a third schema.
 
 ## Decision to make after prototype
 
 | Question | Possible outcomes |
 |---|---|
-| Does Cognition Network improve readability over either original variant? | merge / iterate / park |
-| Are explicit capacities still visible enough? | keep all / hide some / rename |
-| Does the fiction feel Factorio-native? | proceed / revise entity names / revise resource model |
-| Is live mod testing worth doing next? | yes after review / no, continue fixtures |
+| Does Cognition Network improve readability over either original variant? | self-probe says yes; validate with second person later |
+| Are explicit capacities still visible enough? | keep all for now |
+| Does the fiction feel Factorio-native? | proceed with Cognition Network wording |
+| Is live mod testing worth doing next? | design live read-only snapshot extraction next; review before any live deployment |
 
 ## Timeline summary
 

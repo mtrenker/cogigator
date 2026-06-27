@@ -1,7 +1,7 @@
 # Probe: Cognition Network Human Comprehension
 
 - Date: 2026-06-27
-- Status: ready
+- Status: completed (self-probe)
 - Related synthesis: [Cognition Network Synthesis](2026-06-27-industrial-cognition-synthesis.md)
 - Related scorecard: [Industrial Cognition A/B scorecard](2026-06-26-industrial-cognition-ab.scorecard.md)
 
@@ -64,26 +64,28 @@ Use 1-5 scores.
 
 | Field | Response |
 |---|---|
-| Participant / initials |  |
-| Scenario shown |  |
-| Variant shown |  |
-| Next action answer |  |
-| Evidence they cited |  |
-| Factorio-native reaction |  |
-| Confusing wording |  |
-| Next-action clarity score |  |
-| Evidence traceability score |  |
-| Factorio-native feel score |  |
-| Trust/readability score |  |
-| Overall pass? | yes / no / iterate |
+| Participant / initials | MT self-probe |
+| Scenario shown | `dense-cell-truncated`; local Factorio Field Station placement/removal also checked |
+| Variant shown | Both `capacity-vector` and `cognition-flow` |
+| Next action answer | Add Field Stations / split the dense cell to restore coverage; add Cognition Processors for saturated attention/flow; keep Memory Banks/Planning Relay as supporting network entities. |
+| Evidence they cited | `Truncated: true`, omitted entity count/reason, scan/sightline bottlenecks, attention/cognitionFlow bottlenecks, degradation effects, and the 32×32 worksite shown by `/cogigator-worksites`. |
+| Factorio-native reaction | Pass: reads as built infrastructure/capacity rather than a generic dashboard. |
+| Confusing wording | None blocking after Cognition Network wording pass. |
+| Next-action clarity score | 5 |
+| Evidence traceability score | 5 |
+| Factorio-native feel score | 4 |
+| Trust/readability score | 5 |
+| Overall pass? | yes — sufficient to proceed to live read-only snapshot extraction design, with a future second-person probe still useful before broader UX claims. |
 
 ## Pass condition
 
 The synthesis passes this probe if the participant can name a concrete next build/change and cite the relevant bottleneck/effect line without additional explanation.
 
+Result: passed for the MT self-probe.
+
 ## Follow-up decisions
 
-- If pass: keep Cognition Network wording and begin designing live read-only snapshot extraction.
+- If pass: keep Cognition Network wording and begin designing live read-only snapshot extraction. **Selected.**
 - If partial: revise entity/capacity wording and rerun the probe.
 - If fail: revisit whether explicit capacities should be exposed differently in the Pi output.
 
