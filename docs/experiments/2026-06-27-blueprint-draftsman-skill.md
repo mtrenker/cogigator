@@ -1,7 +1,7 @@
 # Experiment: Blueprint Draftsman Skill
 
 - Date: 2026-06-27
-- Status: prototype
+- Status: prototype failed validation; needs different approach
 - Related resources:
   - [Blueprint Proposal Mode](2026-06-27-blueprint-proposal-mode.md)
   - [Blueprint Draftsman doctrine](../blueprints/BLUEPRINT_DRAFTSMAN.md)
@@ -11,7 +11,7 @@
 
 Direct LLM-generated Factorio blueprint strings are too unreliable for layout constraints. They may be technically importable while still being awkward, non-compact, or inconsistent with the requested I/O side.
 
-Blueprint work needs a stronger procedure: explicit grid first, deterministic generation second, validation before returning a string.
+The first deterministic draftsman pass improved importability and compactness, but still failed actual layout validation: belts and inserters did not make practical Factorio sense. Blueprint work needs a stronger procedure than coordinate generation alone.
 
 ## Prototype
 
@@ -30,11 +30,13 @@ It returns:
 - Factorio blueprint JSON;
 - Factorio blueprint string.
 
-Current template:
+Current templates:
 
 | Template | Purpose | Status |
 |---|---|---|
-| `red-science-same-side` | Four automation science assemblers, west-side input/output, power, lights | generated and structurally validated; needs in-game import review |
+| `red-science-same-side` | Four automation science assemblers, west-side input/output, power, lights | failed: visually sparse/awkward after import |
+| `red-science-endgame-same-side-c` | Four endgame assemblers, express belts, west-side I/O | failed: still too tall/sparse and awkward |
+| `red-science-endgame-same-side-c3-small` | Two endgame assemblers, compact same-side I/O | imported and more compact, but failed practical validation: belts/inserters still do not make sense |
 
 ## Skill rules
 
@@ -48,16 +50,25 @@ Core rule:
 
 > Never freehand blueprint strings. Generate from an explicit coordinate model and validate constraints.
 
+New lesson:
+
+> Structural validation is not enough. A blueprint helper must reason with Factorio connection semantics or use known-good primitives/golden templates.
+
 ## Current limitations
 
 - Validation is structural, not a full Factorio simulation.
-- Inserter reach/orientation still needs in-game import review.
-- Only one template exists.
+- Inserter pickup/drop and belt lane behavior are not validated.
+- Generated coordinate templates can still be bad even when importable.
 - This skill is proposal-only; humans still import/place blueprints manually.
 
 ## Next steps
 
-- Import `docs/blueprints/red-science-same-side.v2.txt` into Factorio and inspect.
-- If the layout is good, add it as a named template for blueprint proposal mode.
-- If not, adjust the coordinate model and rerun the generator.
-- Add more deterministic templates: green circuits, belt balancer stubs, smelting columns, mall cells.
+- Pause coordinate-only generation for production layouts.
+- Try a different approach:
+  - build from known-good Factorio primitives;
+  - add semantic validators for inserter pickup/drop and belt lane flow;
+  - or use human-approved golden templates as seeds, then transform/parameterize them.
+- Keep the failed red science artifacts as regression examples:
+  - `docs/blueprints/red-science-same-side.v2.txt`
+  - `docs/blueprints/red-science-endgame-same-side-c3-small.failed.txt`
+- Do not wire these templates into blueprint proposal mode as recommended outputs.

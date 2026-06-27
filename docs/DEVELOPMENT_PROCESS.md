@@ -305,8 +305,9 @@ The local A/B demo has passed the mechanical integration gate, and the Cognition
 - preserve the [scorecard](./experiments/2026-06-26-industrial-cognition-ab.scorecard.md) for a future second-person comprehension probe;
 - use the [Cognition Network synthesis brief](./experiments/2026-06-27-industrial-cognition-synthesis.md) as the current design source;
 - use the completed [Cognition Network self-probe](./experiments/2026-06-27-industrial-cognition-synthesis.probe.md) as permission to keep the wording for the next prototype;
-- design a reviewed live Factorio snapshot bridge that remains read-only and local-first;
-- update the [experiment record](./experiments/2026-06-26-industrial-cognition-ab.md) after that design is tested;
+- for blueprint work, use the [Blueprint Draftsman lesson](./experiments/2026-06-27-blueprint-draftsman-skill.md): coordinate-only generation failed practical review, so the next approach should use semantic belt/inserter validation, known-good primitives, or human-approved golden templates;
+- keep the local live snapshot bridge read-only and local-first while blueprint drafting remains proposal-only;
+- update the [experiment record](./experiments/2026-06-26-industrial-cognition-ab.md) after the next blueprint approach is tested;
 - keep the [review note](./experiments/2026-06-26-industrial-cognition-ab.review.md) as the safety gate for public-facing summaries.
 
 The spike should remain read-only until a later task explicitly designs and reviews mutation/approval behavior.

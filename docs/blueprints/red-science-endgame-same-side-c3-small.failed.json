@@ -1,0 +1,271 @@
+{
+  "name": "red-science-endgame-same-side-c3-small",
+  "footprint": {
+    "left": -2,
+    "top": -2,
+    "right": 5,
+    "bottom": 5,
+    "width": 8,
+    "height": 8
+  },
+  "io": {
+    "side": "west",
+    "input": "x=-1 vertical express belt southbound; copper plates + iron gear wheels lane-balanced",
+    "output": "x=-2 vertical express belt northbound; automation science packs",
+    "tileDirection": "vertical; continue the two west-side belts between tiles"
+  },
+  "preview": [
+    "west side",
+    "O I > A",
+    "O I < A",
+    "O I > A",
+    "O I < A",
+    "O=output northbound, I=input southbound, A=assembler-3"
+  ],
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "blueprint": {
+    "blueprint": {
+      "item": "blueprint",
+      "label": "Endgame red science C3 small - same-side I/O",
+      "description": "Proposal-only. Compact 2-assembler tile. West side I/O: x=-1 express input belt carries copper plates + iron gear wheels; x=-2 express output belt carries automation science packs. Tile vertically by continuing belts.",
+      "icons": [
+        {
+          "signal": {
+            "type": "item",
+            "name": "automation-science-pack"
+          },
+          "index": 1
+        }
+      ],
+      "entities": [
+        {
+          "entity_number": 1,
+          "name": "assembling-machine-3",
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 2,
+          "name": "stack-inserter",
+          "position": {
+            "x": 0,
+            "y": -1
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 3,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 4,
+          "name": "assembling-machine-3",
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 5,
+          "name": "stack-inserter",
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 6,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 7,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": -2
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 8,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": -2
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 9,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": -1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 10,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": -1
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 11,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 0
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 12,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 0
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 13,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 14,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 1
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 15,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 2
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 16,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 2
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 17,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 3
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 18,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 3
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 19,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 4
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 20,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 4
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 21,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 5
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 22,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 5
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 23,
+          "name": "substation",
+          "position": {
+            "x": 4.5,
+            "y": 1.5
+          }
+        },
+        {
+          "entity_number": 24,
+          "name": "small-lamp",
+          "position": {
+            "x": 5,
+            "y": -1
+          }
+        },
+        {
+          "entity_number": 25,
+          "name": "small-lamp",
+          "position": {
+            "x": 5,
+            "y": 4
+          }
+        }
+      ],
+      "version": 562949954142208
+    }
+  },
+  "blueprintString": "0eJydlsGOmzAURX/F8rYxBQPphKqrURddtYtKXVRVZeApsWqMZZt2UMS/90FmkmpAhXgJhnOPL7yEMy1VB8ZK7WlxptJDQ4t/zu2oEiUoPPdR10fRALFQE1dJ0BWQx5S4RihFGHG4xpysgXx6+xlvq8FVVhovW403f7GtaZ1QrNWqj8hj2xhRecKZcA6aUoElXiqIyDdwnrxgCvL0gSUEnowF54jUpvMEbTyphLUSHKlaY/Beo4THozdE2laTIwhL/pwAlHs/EviV0HZ+hhCdbxsxel63hW6/XES+ohH5DdbLCvfYk7LHPO2l7qQ+ThAX4U4lnnS0+H6mTh61UGOPvjeA257q3FGN3eDRLYk9J7ExiQ7I0DU80SIZfuwoYIRHswk5HfQ/ddeUYPGCG+xSHJqwRlQnqYGlGIUty0vnZ4pAvqM9LWJMsFBJ83+LWRq/pjmPlzCpHbaBK7OceMphCQbVEqMuS3yBmV6ZqkX3k8Cd16vkV+D9AjgLqiYNrCa/sxq+3sw+qJlsvZl3V/DzHDBvhXamtZ6Nb/EczZLL83xlnS3AH+6H80V4vAA/BJsn6+ZJHKyerKsnSah7vEGdh6rHG8zTUPMtpWeh5ls6z0PNN7zoyT7UfMOLngTPaLrBPHhG0w3mwTOarZvz4BHN1s158ITmG8yDJzTfYH6bUNeV+Ac0XToDZlF+mZwoH5Yot1GcPuKYEo2ZU/KXn7wlRH4HIhvGrxv8nnLTSr7nh+xwyLMk4zx+GIa/R7KQ0g=="
+}

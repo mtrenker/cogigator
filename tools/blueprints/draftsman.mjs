@@ -84,13 +84,179 @@ function validateRedScience(bp) {
   return { ok: errors.length === 0, errors };
 }
 
+function redScienceEndgameSameSideC() {
+  entityNumber = 1;
+  const entities = [];
+  const assemblerYs = [0, 4, 8, 12];
+
+  // Concept C: clean vertical tile, all I/O on west side.
+  //   x=-2 output science belt, northbound
+  //   x=-1 input mixed belt, southbound (copper plate + iron gear wheels)
+  //   x=0 inserter column
+  //   x=2 assembler column
+  //   x=5 power/light column
+  for (const y of assemblerYs) {
+    entities.push(entity('assembling-machine-3', 2, y, { recipe: 'automation-science-pack' }));
+    entities.push(entity('stack-inserter', 0, y - 1, { direction: 2 }));
+    entities.push(entity('long-handed-inserter', 0, y + 1, { direction: 6 }));
+  }
+
+  for (let y = -2; y <= 14; y++) {
+    entities.push(entity('express-transport-belt', -1, y, { direction: 4 }));
+    entities.push(entity('express-transport-belt', -2, y, { direction: 0 }));
+  }
+
+  entities.push(entity('substation', 5.5, 6.5));
+  for (const y of [1, 6, 11]) entities.push(entity('small-lamp', 5, y));
+
+  const blueprint = {
+    blueprint: {
+      item: 'blueprint',
+      label: 'Endgame red science C - same-side I/O',
+      description: 'Proposal-only. Concept C: west-side I/O. x=-1 express input belt carries copper plates + iron gear wheels. x=-2 express output belt carries automation science packs. Tile vertically by overlapping/continuing belts.',
+      icons: [{ signal: { type: 'item', name: 'automation-science-pack' }, index: 1 }],
+      entities,
+      version: 562949954142208,
+    },
+  };
+
+  return {
+    name: 'red-science-endgame-same-side-c',
+    footprint: { left: -2, top: -2, right: 6, bottom: 14, width: 9, height: 17 },
+    io: {
+      side: 'west',
+      input: 'x=-1 vertical express belt southbound; copper plates + iron gear wheels lane-balanced',
+      output: 'x=-2 vertical express belt northbound; automation science packs',
+      tileDirection: 'vertical; continue/overlap the two west-side belts',
+    },
+    preview: [
+      'west side',
+      'x=-2 output ↑ | x=-1 input ↓ | x=0 inserters | x=2 assemblers | x=5 power/lights',
+      'repeat rows at y=0,4,8,12',
+    ],
+    validation: validateRedScienceEndgameC(blueprint),
+    blueprint,
+    blueprintString: encodeBlueprint(blueprint),
+  };
+}
+
+function validateRedScienceEndgameC(bp) {
+  const ents = bp.blueprint.entities;
+  const assemblers = ents.filter(e => e.name === 'assembling-machine-3');
+  const belts = ents.filter(e => e.name === 'express-transport-belt');
+  const substations = ents.filter(e => e.name === 'substation');
+  const lamps = ents.filter(e => e.name === 'small-lamp');
+  const stackInserters = ents.filter(e => e.name === 'stack-inserter');
+  const longInserters = ents.filter(e => e.name === 'long-handed-inserter');
+  const errors = [];
+  if (assemblers.length !== 4) errors.push(`expected 4 assemblers, got ${assemblers.length}`);
+  if (!assemblers.every(e => e.recipe === 'automation-science-pack')) errors.push('not every assembler makes automation-science-pack');
+  if (belts.length !== 34) errors.push(`expected 34 express belts, got ${belts.length}`);
+  if (stackInserters.length !== 4) errors.push(`expected 4 stack inserters, got ${stackInserters.length}`);
+  if (!stackInserters.every(e => e.direction === 2)) errors.push('stack inserters should face east into assemblers');
+  if (longInserters.length !== 4) errors.push(`expected 4 long-handed inserters, got ${longInserters.length}`);
+  if (!longInserters.every(e => e.direction === 6)) errors.push('long-handed inserters should face west to output belt');
+  if (substations.length !== 1) errors.push(`expected 1 substation, got ${substations.length}`);
+  if (lamps.length !== 3) errors.push(`expected 3 lamps, got ${lamps.length}`);
+  return { ok: errors.length === 0, errors };
+}
+
+function redScienceEndgameSameSideC3Small() {
+  entityNumber = 1;
+  const entities = [];
+  const assemblerYs = [0, 3];
+
+  // Concept C3-small: compact 2-assembler vertical tile, all I/O on west side.
+  //   x=-2 output science belt, northbound
+  //   x=-1 input mixed belt, southbound (copper plate + iron gear wheels)
+  //   x=0 inserter column
+  //   x=2 assembler column (assemblers touch as a compact stack)
+  //   x=4/5 power + lights
+  for (const y of assemblerYs) {
+    entities.push(entity('assembling-machine-3', 2, y, { recipe: 'automation-science-pack' }));
+    // Input: pickup from x=-1 input belt, drop into west edge of assembler.
+    entities.push(entity('stack-inserter', 0, y - 1, { direction: 2 }));
+    // Output: pickup from assembler, long-drop to x=-2 output belt.
+    entities.push(entity('long-handed-inserter', 0, y + 1, { direction: 6 }));
+  }
+
+  for (let y = -2; y <= 5; y++) {
+    entities.push(entity('express-transport-belt', -1, y, { direction: 4 }));
+    entities.push(entity('express-transport-belt', -2, y, { direction: 0 }));
+  }
+
+  entities.push(entity('substation', 4.5, 1.5));
+  entities.push(entity('small-lamp', 5, -1));
+  entities.push(entity('small-lamp', 5, 4));
+
+  const blueprint = {
+    blueprint: {
+      item: 'blueprint',
+      label: 'Endgame red science C3 small - same-side I/O',
+      description: 'Proposal-only. Compact 2-assembler tile. West side I/O: x=-1 express input belt carries copper plates + iron gear wheels; x=-2 express output belt carries automation science packs. Tile vertically by continuing belts.',
+      icons: [{ signal: { type: 'item', name: 'automation-science-pack' }, index: 1 }],
+      entities,
+      version: 562949954142208,
+    },
+  };
+
+  return {
+    name: 'red-science-endgame-same-side-c3-small',
+    footprint: { left: -2, top: -2, right: 5, bottom: 5, width: 8, height: 8 },
+    io: {
+      side: 'west',
+      input: 'x=-1 vertical express belt southbound; copper plates + iron gear wheels lane-balanced',
+      output: 'x=-2 vertical express belt northbound; automation science packs',
+      tileDirection: 'vertical; continue the two west-side belts between tiles',
+    },
+    preview: [
+      'west side',
+      'O I > A',
+      'O I < A',
+      'O I > A',
+      'O I < A',
+      'O=output northbound, I=input southbound, A=assembler-3',
+    ],
+    validation: validateRedScienceEndgameC3Small(blueprint),
+    blueprint,
+    blueprintString: encodeBlueprint(blueprint),
+  };
+}
+
+function validateRedScienceEndgameC3Small(bp) {
+  const ents = bp.blueprint.entities;
+  const assemblers = ents.filter(e => e.name === 'assembling-machine-3');
+  const belts = ents.filter(e => e.name === 'express-transport-belt');
+  const substations = ents.filter(e => e.name === 'substation');
+  const lamps = ents.filter(e => e.name === 'small-lamp');
+  const stackInserters = ents.filter(e => e.name === 'stack-inserter');
+  const longInserters = ents.filter(e => e.name === 'long-handed-inserter');
+  const errors = [];
+  if (assemblers.length !== 2) errors.push(`expected 2 assemblers, got ${assemblers.length}`);
+  if (!assemblers.every(e => e.recipe === 'automation-science-pack')) errors.push('not every assembler makes automation-science-pack');
+  if (belts.length !== 16) errors.push(`expected 16 express belts, got ${belts.length}`);
+  if (stackInserters.length !== 2) errors.push(`expected 2 stack inserters, got ${stackInserters.length}`);
+  if (!stackInserters.every(e => e.direction === 2)) errors.push('stack inserters should face east into assemblers');
+  if (longInserters.length !== 2) errors.push(`expected 2 long-handed inserters, got ${longInserters.length}`);
+  if (!longInserters.every(e => e.direction === 6)) errors.push('long-handed inserters should face west to output belt');
+  if (substations.length !== 1) errors.push(`expected 1 substation, got ${substations.length}`);
+  if (lamps.length !== 2) errors.push(`expected 2 lamps, got ${lamps.length}`);
+  return { ok: errors.length === 0, errors };
+}
+
 const command = process.argv[2] ?? 'help';
 if (command === 'red-science-same-side') {
   const result = redScienceSameSide();
   console.log(JSON.stringify(result, null, 2));
+} else if (command === 'red-science-endgame-same-side-c') {
+  const result = redScienceEndgameSameSideC();
+  console.log(JSON.stringify(result, null, 2));
+} else if (command === 'red-science-endgame-same-side-c3-small') {
+  const result = redScienceEndgameSameSideC3Small();
+  console.log(JSON.stringify(result, null, 2));
 } else if (command === 'decode') {
   console.log(JSON.stringify(decodeBlueprint(process.argv[3]), null, 2));
 } else {
-  console.error('Usage: node tools/blueprints/draftsman.mjs red-science-same-side');
+  console.error('Usage: node tools/blueprints/draftsman.mjs red-science-same-side|red-science-endgame-same-side-c|red-science-endgame-same-side-c3-small');
   process.exit(command === 'help' ? 0 : 1);
 }
