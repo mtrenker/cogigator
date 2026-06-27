@@ -13,6 +13,8 @@
 --   Task 004 (Variant A) / Task 005 (Variant B) — register/unregister events
 --   Task 006 (common reports) — iterate stations when generating snapshots
 
+local experiments = require("scripts.common.experiments")
+
 local M = {}
 
 -- ---------------------------------------------------------------------------
@@ -43,7 +45,6 @@ end
 function M.register(state, entity, variant_id)
   -- Station id format: <station_kind>-<seq>
   -- station_kind comes from the variant descriptor; seq is a monotonic counter.
-  local experiments = require("scripts.common.experiments")
   local descriptor  = experiments.get_variant(variant_id)
   local kind        = descriptor and descriptor.station_kind or "station"
   local station_id  = kind .. "-" .. state.next_seq
