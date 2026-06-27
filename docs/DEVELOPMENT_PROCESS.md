@@ -299,13 +299,13 @@ Do not include actual secret material or sensitive runtime output.
 
 ## Current next step
 
-The local A/B demo has passed the mechanical integration gate, and the Cognition Network now has a read-only entity shell. The recommended next step is local mod smoke testing:
+The local A/B demo has passed the mechanical integration gate, and the Cognition Network now has a locally smoke-tested read-only entity/worksite shell. The recommended next step is human comprehension testing:
 
 - keep the shared read-only bridge/Pi path from the [runbook](./experiments/2026-06-26-industrial-cognition-ab.runbook.md);
 - preserve the [scorecard](./experiments/2026-06-26-industrial-cognition-ab.scorecard.md) for the manual human comprehension probe;
 - use the [Cognition Network synthesis brief](./experiments/2026-06-27-industrial-cognition-synthesis.md) as the current design source;
-- load the mod locally and verify Field Stations, Cognition Processors, Memory Banks, and Planning Relays appear with readable locale;
-- confirm Field Station placement only updates Cogigator registry/status counts and does not add assistant mutation behavior;
+- ask a reader/player what they would build next after seeing degraded/truncated Cogigator output;
+- only after that, decide whether to design a reviewed live Factorio snapshot bridge;
 - update the [experiment record](./experiments/2026-06-26-industrial-cognition-ab.md) after that synthesis is tested;
 - keep the [review note](./experiments/2026-06-26-industrial-cognition-ab.review.md) as the safety gate for public-facing summaries.
 

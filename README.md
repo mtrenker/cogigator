@@ -135,4 +135,4 @@ Infrastructure may be discussed only at the non-sensitive level already used in 
 
 ## Suggested next step
 
-The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. The current iteration is the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md): the wording pass and in-game read-only entity shell are in place. Next, load the mod locally to smoke-test placement/locale, then run the manual human comprehension probe before any live Factorio/Kubernetes validation.
+The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. The current iteration is the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md): the wording pass and in-game read-only entity/worksite shell are in place and locally smoke-tested. Next, run the manual human comprehension probe, then decide whether to connect live Factorio snapshots to the bridge in a separately reviewed phase.

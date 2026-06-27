@@ -8,6 +8,8 @@
   - `8abc48c` — read-only Cogigator A/B substrate spike
   - `c88860f` — Cognition Network synthesis brief and fixture wording
   - `42975de` — mod-side wording aligned with Cognition Network synthesis
+  - `c778d11` — read-only Cognition Network entity shell
+  - `7317264` — Field Station assigns a default read-only worksite
 - Related resources:
   - [Industrial Cognition A/B experiment](2026-06-26-industrial-cognition-ab.md)
   - [A/B contract](2026-06-26-industrial-cognition-ab.contract.md)
@@ -103,8 +105,9 @@ The synthesis prototype now has two read-only layers:
 - bridge fixtures use Cognition Network language for degraded/truncated snapshots;
 - mod-side variant helpers and locale strings point players toward concrete factory actions: add Field Stations, Cognition Processors, Memory Banks, or a Planning Relay;
 - the Factorio mod defines an in-game entity shell for those four structures so the network can be placed and discussed in-game;
-- runtime code observes Field Station placement/removal for registry counts only;
-- no schema, bridge API, assistant action, or world-mutation behavior changed.
+- runtime code observes Field Station placement/removal, updates registry counts, and assigns/releases one default 32×32 read-only worksite;
+- local Windows Factorio smoke testing confirmed placement shows `stations=1 worksites=1`, `/cogigator-worksites` prints bounds, and removal returns to `stations=0 worksites=0`;
+- no schema, bridge API, live bridge connection, assistant action, or world-mutation behavior changed.
 
 ## Acceptance criteria
 
@@ -127,8 +130,8 @@ The synthesis prototype now has two read-only layers:
 
 ## Timeline summary
 
-After the first A/B spike passed the local integration gate, the next iteration is a synthesis: **Cognition Network** keeps explicit capacity bottlenecks but frames them as a built, powered, saturating factory system.
+After the first A/B spike passed the local integration gate, the next iteration became **Cognition Network**: explicit capacity bottlenecks framed as a built, powered, saturating factory system. The first in-game shell now exists and has been locally smoke-tested: Field Stations create read-only 32×32 worksites, while the bridge/Pi path remains fixture-backed until a later reviewed integration phase.
 
 ## Safety/publication notes
 
-This synthesis brief is documentation-only. It contains no secrets, credentials, private IPs, raw cluster output, sealed-secret contents, deployment instructions, or world mutation path.
+This synthesis brief contains no secrets, credentials, private IPs, raw cluster output, sealed-secret contents, deployment instructions, or assistant mutation path. Local Factorio testing was performed on a private Windows test save; no live server or Kubernetes validation was performed.
