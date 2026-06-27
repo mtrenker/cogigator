@@ -27,10 +27,10 @@ local UNITS = {
 }
 
 local DEFAULT_NOTES = {
-  scan = "Shrink the worksite or add scan capacity.",
-  attention = "Reduce active watches or add field stations.",
-  memory = "Reduce retained history or add memory capacity.",
-  planning = "Enable planning capacity for build-intent reasoning.",
+  scan = "Worksite exceeds Field Station coverage. Add stations or split the cell.",
+  attention = "Cognition processors are saturated. Add processing or watch fewer sites.",
+  memory = "Memory banks are shallow; add storage to improve confidence.",
+  planning = "Planning Relay is offline while the Cognition Network is under capacity.",
 }
 
 local EFFECTS = {

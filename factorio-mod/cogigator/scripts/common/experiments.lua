@@ -42,7 +42,7 @@ local VARIANTS = {
     capacity_keys     = { "sightline", "cognitionFlow", "cognitionBuffer", "memory" },
     -- Variant-specific boolean degradation flags (§3.3).
     degradation_flags = { "overloaded" },
-    tagline           = "Two scarcities: where it can look, and how hard it can think.",
+    tagline           = "Cognition Network fiction: sightline plus manufactured thinking capacity.",
   },
 
   -- Variant B — capacity-vector (inspired by gpt-5.5)
@@ -58,7 +58,7 @@ local VARIANTS = {
     capacity_keys     = { "scan", "attention", "memory", "planning" },
     -- Variant B exposes no extra degradation flags (§3.3).
     degradation_flags = {},
-    tagline           = "Four capacities that bound how much the station can perceive, track, recall, and plan.",
+    tagline           = "Cognition Network diagnostics: scan, attention, memory, and planning capacity.",
   },
 }
 

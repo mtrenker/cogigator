@@ -114,7 +114,7 @@ function M.capacity_sightline(worksite_entry, scan_value)
   if value < limit then
     note = "Observation reach below worksite area: "
            .. tostring(value) .. "/" .. tostring(limit) .. " tiles²."
-           .. " Extend or reposition the Cogigator Core."
+           .. " Add Field Stations or split the cell."
   end
 
   return make_capacity("sightline", "Sightline", value, limit, "tiles²", note)
@@ -135,9 +135,9 @@ function M.capacity_cognition_flow(flow_value)
     note = "Flow below demand: "
            .. string.format("%.1f", value) .. "/" .. tostring(limit) .. " cog/min."
     if ratio < THRESHOLD.severe then
-      note = note .. " Urgently build more Cogitation Datacenter modules."
+      note = note .. " Urgently add Cognition Processors."
     else
-      note = note .. " Build more Cogitation Datacenter modules."
+      note = note .. " Add Cognition Processors."
     end
   end
 
@@ -157,7 +157,7 @@ function M.capacity_cognition_buffer(buffer_value)
   if value < limit then
     note = "Buffer depleted: "
            .. string.format("%.1f", value) .. "/" .. tostring(limit) .. " cog stored."
-           .. " Burst and deep-analysis requests will queue or run deterministic-only."
+           .. " Add Cognition Buffer or Memory Banks; deep analysis will queue or run deterministic-only."
   end
 
   return make_capacity("cognitionBuffer", "Cognition Buffer", value, limit, "cog", note)
@@ -176,7 +176,7 @@ function M.capacity_memory(memory_value)
   if value < limit then
     note = "Memory below capacity: "
            .. tostring(value) .. "/" .. tostring(limit) .. " units retained."
-           .. " Historical context depth reduced."
+           .. " Add Memory Banks to improve confidence."
   end
 
   return make_capacity("memory", "Memory", value, limit, "units", note)
