@@ -1,0 +1,13 @@
+{
+  "name": "cogigator",
+  "version": "0.1.0",
+  "title": "Cogigator",
+  "author": "pacabytes",
+  "contact": "",
+  "homepage": "",
+  "description": "Shared substrate for the Industrial Cognition A/B spike (experiment: industrial-cognition-ab). Read-only observation mod — no world mutation.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.0"
+  ]
+}

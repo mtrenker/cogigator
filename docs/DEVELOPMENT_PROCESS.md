@@ -13,7 +13,8 @@ idea
   -> model contest
   -> comparison artifact
   -> shared-substrate experiment
-  -> implementation result
+  -> safety/fairness review
+  -> evaluated implementation result
   -> timeline update
 ```
 
@@ -133,6 +134,20 @@ The project then generalized the model contest into a reusable A/B testing frame
 
 The new doctrine: build a shared substrate once, then run multiple competing gameplay/UX interpretations on top of it.
 
+### 9. Build the first read-only substrate spike
+
+The first A/B spike turned the doctrine into a local, public-safe substrate:
+
+- [`docs/experiments/2026-06-26-industrial-cognition-ab.contract.md`](./experiments/2026-06-26-industrial-cognition-ab.contract.md) freezes field names, scenario IDs, variant metadata, and invariants.
+- [`docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md`](./experiments/2026-06-26-industrial-cognition-ab.runbook.md) describes the local demo loop.
+- [`docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md`](./experiments/2026-06-26-industrial-cognition-ab.scorecard.md) provides the evaluation worksheet.
+- [`docs/experiments/2026-06-26-industrial-cognition-ab.review.md`](./experiments/2026-06-26-industrial-cognition-ab.review.md) records the public-safety and variant-fairness gate.
+
+The turning point is that Cogigator is no longer only a plan comparison. It now
+has a fixture-backed contract, a review-cleared local loop, and a Pi-facing
+snapshot display for comparing two gameplay interpretations without exposing
+sensitive infrastructure or adding a world mutation path.
+
 ## Standard workflow for future sessions
 
 Use this loop for major changes:
@@ -169,14 +184,19 @@ Use this loop for major changes:
    - Add or update a file under `docs/experiments/`.
    - Include question, variants, substrate changes, scenarios, results, decision, and timeline summary.
 
-7. **Update the public timeline only for turning points**
+7. **Gate public documentation**
+   - Link public timeline/onboarding updates only after the relevant review note passes.
+   - Keep links to public-safe artifacts: contract, runbook, scorecard, review note, and experiment record.
+
+8. **Update the public timeline only for turning points**
    - new hypothesis;
    - completed experiment;
    - substrate milestone;
+   - safety/fairness gate;
    - implementation demo;
    - design decision.
 
-8. **Commit in story-sized steps**
+9. **Commit in story-sized steps**
    - One commit should represent one comprehensible process step.
    - Avoid dumping unrelated implementation and documentation changes into the same commit unless the documentation describes that implementation step.
 
@@ -279,13 +299,12 @@ Do not include actual secret material or sensitive runtime output.
 
 ## Current next step
 
-The recommended next step is to execute [`../PLAN.md`](../PLAN.md), the fleet-compatible plan for the first A/B implementation:
+The local A/B demo has passed the mechanical integration gate. The recommended next step is synthesis:
 
-- build the shared substrate;
-- implement Variant A: Sightline + Cognition Flow;
-- implement Variant B: Field Station + Capacity Vector;
-- create bridge/Pi read-only tooling;
-- evaluate both against shared scenarios;
-- update the experiment record and public timeline.
+- keep the shared read-only bridge/Pi path from the [runbook](./experiments/2026-06-26-industrial-cognition-ab.runbook.md);
+- preserve the [scorecard](./experiments/2026-06-26-industrial-cognition-ab.scorecard.md) for the manual human comprehension probe;
+- synthesize Capacity Vector's clearer diagnostics with Cognition Flow's stronger Factorio-native fiction;
+- update the [experiment record](./experiments/2026-06-26-industrial-cognition-ab.md) after that synthesis is tested;
+- keep the [review note](./experiments/2026-06-26-industrial-cognition-ab.review.md) as the safety gate for public-facing summaries.
 
-The first implementation milestone should remain read-only and should not require persistent cluster changes.
+The spike should remain read-only until a later task explicitly designs and reviews mutation/approval behavior.

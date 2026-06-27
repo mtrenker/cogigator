@@ -2,7 +2,7 @@
 
 **Cogigator** is a Factorio 2.0 / Space Age mod and companion-system concept: an in-world, physically bounded machine intelligence that observes local production cells, diagnoses problems from real game state, and eventually proposes changes only with explicit player approval.
 
-This repository currently contains the **planning and process artifacts** for Cogigator, not the first implementation yet.
+This repository currently contains the **planning and read-only spike artifacts** for Cogigator. The current implementation work is fixture-based and local; it is not deployed to a live Factorio server and does not mutate a world.
 
 ## Public project page
 
@@ -11,7 +11,7 @@ This repository currently contains the **planning and process artifacts** for Co
 
 ## Current status
 
-The project is in the concept and architecture phase.
+The project has moved from concept and architecture into the first shared-substrate A/B spike.
 
 What exists now:
 
@@ -21,9 +21,13 @@ What exists now:
 - two competing implementation plans from different models;
 - a visual comparison report;
 - a reusable A/B testing framework for future design contests;
+- a frozen A/B spike contract;
+- a local read-only bridge stub and deterministic fixture corpus;
+- two variant modules for the first industrial cognition comparison;
+- a demo runbook, scoring worksheet, and safety review note;
 - a GitHub Pages timeline documenting the process.
 
-No Factorio mod code, bridge code, or Pi extension implementation has been started yet.
+No live server integration, cluster deployment, or world mutation path exists in this spike.
 
 ## Why this repo exists
 
@@ -50,6 +54,10 @@ The goal is not only to build a mod. The goal is to show how AI-assisted plannin
 | [`PLAN_REPORT.html`](./PLAN_REPORT.html) | Self-contained visual comparison report. |
 | [`AB_TEST_FRAMEWORK.md`](./AB_TEST_FRAMEWORK.md) | Reusable framework for shared-substrate A/B tests. |
 | [`PLAN.md`](./PLAN.md) | Fleet-compatible implementation plan for the first shared-substrate A/B spike. |
+| [`docs/experiments/2026-06-26-industrial-cognition-ab.contract.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.contract.md) | Frozen schema and invariants for the first spike. |
+| [`docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md) | Local read-only demo loop for both variants. |
+| [`docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md) | Evaluation worksheet for scoring the variants. |
+| [`docs/experiments/2026-06-26-industrial-cognition-ab.review.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.review.md) | Public-safety and variant-fairness review gate. |
 | [`docs/DEVELOPMENT_PROCESS.md`](./docs/DEVELOPMENT_PROCESS.md) | How the AI-assisted documentation/planning workflow works. |
 | [`docs/experiments/`](./docs/experiments/) | Standardized experiment records. |
 
@@ -89,7 +97,9 @@ The first planned design contest compares two interpretations of the datacenter 
   - Datacenter Core aggregates explicit capacities: scan, attention, memory, planning.
   - Each capacity gates a class of assistant capabilities.
 
-See [`AB_TEST_FRAMEWORK.md`](./AB_TEST_FRAMEWORK.md) and [`docs/experiments/2026-06-26-industrial-cognition-ab.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.md).
+The spike now has a public-safe read-only substrate: a frozen contract, synthetic scenarios, a local bridge stub, Pi-facing read/status tools, a runbook, a scorecard, a completed safety/fairness review, and a locally tested Pi snapshot display for degraded/truncated scenarios.
+
+See [`AB_TEST_FRAMEWORK.md`](./AB_TEST_FRAMEWORK.md), [`docs/experiments/2026-06-26-industrial-cognition-ab.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.md), [`docs/experiments/2026-06-26-industrial-cognition-ab.contract.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.contract.md), [`docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md), [`docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md), and [`docs/experiments/2026-06-26-industrial-cognition-ab.review.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.review.md).
 
 ## Publication and docs
 
@@ -124,6 +134,4 @@ Infrastructure may be discussed only at the non-sensitive level already used in 
 
 ## Suggested next step
 
-Execute [`PLAN.md`](./PLAN.md) as a read-only shared-substrate A/B spike.
-
-The first implementation milestone should still be read-only: placed observation structure, bounded worksite, deterministic report, bridge snapshot endpoint, Pi status/snapshot tools, and no world mutation.
+The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. Next, synthesize the clearer Capacity Vector diagnostics with the stronger Cognition Flow fiction, then run the manual human comprehension probe before any live Factorio/Kubernetes validation.

@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "cogigator.snapshot.v1",
+  "experimentId": "industrial-cognition-ab",
+  "scenarioId": "under-computed",
+  "variant": {
+    "experimentId": "industrial-cognition-ab",
+    "variantId": "capacity-vector",
+    "variantLetter": "B",
+    "variantLabel": "Field Station + Capacity Vector",
+    "inspiredBy": "gpt-5.5",
+    "stationKind": "field-station",
+    "stationLabel": "Cogigator Field Station",
+    "capacityKeys": [
+      "scan",
+      "attention",
+      "memory",
+      "planning"
+    ],
+    "degradationFlags": [],
+    "tagline": "A bounded field station that spends scan, attention, memory, and planning capacity."
+  },
+  "requestId": "00000000-0000-0000-0000-000000000000",
+  "serverTime": "2026-06-26T00:00:00Z",
+  "factorio": {
+    "version": "2.0.x",
+    "save": "spike-fixture"
+  },
+  "station": {
+    "stationId": "field-station-1",
+    "stationKind": "field-station",
+    "stationLabel": "Cogigator Field Station",
+    "permissionMode": "read-only-advisor",
+    "transportHealth": "ok",
+    "status": "live"
+  },
+  "worksite": {
+    "surface": "nauvis",
+    "bounds": {
+      "left": 64,
+      "top": 0,
+      "right": 96,
+      "bottom": 32
+    },
+    "width": 32,
+    "height": 32
+  },
+  "tick": 128400,
+  "cognition": {
+    "model": "capacity-vector",
+    "capacities": [
+      {
+        "key": "scan",
+        "label": "Scan",
+        "value": 512,
+        "limit": 1024,
+        "unit": "tiles^2",
+        "satisfied": false,
+        "bottleneck": true,
+        "note": "Increase scan capacity or shrink the watched worksite."
+      },
+      {
+        "key": "attention",
+        "label": "Attention",
+        "value": 1,
+        "limit": 2,
+        "unit": "slots",
+        "satisfied": false,
+        "bottleneck": true,
+        "note": "Too many watches are competing for attention."
+      },
+      {
+        "key": "memory",
+        "label": "Memory",
+        "value": 3,
+        "limit": 6,
+        "unit": "units",
+        "satisfied": false,
+        "bottleneck": false,
+        "note": "Short history limits confidence."
+      },
+      {
+        "key": "planning",
+        "label": "Planning",
+        "value": 0,
+        "limit": 1,
+        "unit": "bool",
+        "satisfied": false,
+        "bottleneck": false,
+        "note": "Planning is disabled while the station is under capacity."
+      }
+    ],
+    "degradation": {
+      "degraded": true,
+      "level": "severe",
+      "flags": {},
+      "reasons": [
+        "scan-below-demand",
+        "attention-slots-exhausted",
+        "planning-disabled"
+      ],
+      "effects": [
+        "report-cadence-slowed",
+        "analysis-depth-reduced",
+        "deterministic-only"
+      ]
+    }
+  },
+  "power": {
+    "satisfaction": 1,
+    "demandKw": 640,
+    "supplyKw": 640,
+    "state": "ok"
+  },
+  "entities": {
+    "totalCount": 16,
+    "byType": {
+      "assembling-machine": 2,
+      "transport-belt": 8,
+      "inserter": 4,
+      "electric-pole": 2
+    },
+    "representative": [
+      {
+        "unitNumber": 501,
+        "name": "assembling-machine-2",
+        "type": "assembling-machine",
+        "status": "working",
+        "position": {
+          "x": 72,
+          "y": 8
+        },
+        "powerState": "working",
+        "recipe": "transport-belt",
+        "inputs": [
+          {
+            "item": "iron-plate",
+            "count": 30
+          },
+          {
+            "item": "iron-gear-wheel",
+            "count": 10
+          }
+        ],
+        "outputs": [
+          {
+            "item": "transport-belt",
+            "count": 4
+          }
+        ],
+        "fluids": []
+      }
+    ]
+  },
+  "findings": [
+    {
+      "code": "under-computed",
+      "severity": "warning",
+      "subjectUnitNumber": null,
+      "subjectName": null,
+      "message": "Station cognition capacity below deterministic report demand.",
+      "evidence": {
+        "degraded": true
+      },
+      "tick": 128400
+    }
+  ],
+  "omitted": {
+    "entityCount": 0,
+    "reason": "none",
+    "caps": {
+      "representative": 8,
+      "byType": 64
+    }
+  },
+  "truncated": false,
+  "expectedDiagnosis": [
+    {
+      "findingCode": "under-computed",
+      "summary": "Factory symptoms are clear enough, but station capacity is degraded and limits explanation depth.",
+      "primary": true
+    }
+  ]
+}

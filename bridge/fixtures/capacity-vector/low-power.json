@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "cogigator.snapshot.v1",
+  "experimentId": "industrial-cognition-ab",
+  "scenarioId": "low-power",
+  "variant": {
+    "experimentId": "industrial-cognition-ab",
+    "variantId": "capacity-vector",
+    "variantLetter": "B",
+    "variantLabel": "Field Station + Capacity Vector",
+    "inspiredBy": "gpt-5.5",
+    "stationKind": "field-station",
+    "stationLabel": "Cogigator Field Station",
+    "capacityKeys": [
+      "scan",
+      "attention",
+      "memory",
+      "planning"
+    ],
+    "degradationFlags": [],
+    "tagline": "A bounded field station that spends scan, attention, memory, and planning capacity."
+  },
+  "requestId": "00000000-0000-0000-0000-000000000000",
+  "serverTime": "2026-06-26T00:00:00Z",
+  "factorio": {
+    "version": "2.0.x",
+    "save": "spike-fixture"
+  },
+  "station": {
+    "stationId": "field-station-1",
+    "stationKind": "field-station",
+    "stationLabel": "Cogigator Field Station",
+    "permissionMode": "read-only-advisor",
+    "transportHealth": "ok",
+    "status": "live"
+  },
+  "worksite": {
+    "surface": "nauvis",
+    "bounds": {
+      "left": 32,
+      "top": 32,
+      "right": 64,
+      "bottom": 64
+    },
+    "width": 32,
+    "height": 32
+  },
+  "tick": 127200,
+  "cognition": {
+    "model": "capacity-vector",
+    "capacities": [
+      {
+        "key": "scan",
+        "label": "Scan",
+        "value": 1024,
+        "limit": 1024,
+        "unit": "tiles^2",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Scan budget covers the worksite."
+      },
+      {
+        "key": "attention",
+        "label": "Attention",
+        "value": 3,
+        "limit": 2,
+        "unit": "slots",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "One station slot remains free."
+      },
+      {
+        "key": "memory",
+        "label": "Memory",
+        "value": 8,
+        "limit": 6,
+        "unit": "units",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Recent observations are retained."
+      },
+      {
+        "key": "planning",
+        "label": "Planning",
+        "value": 1,
+        "limit": 1,
+        "unit": "bool",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Planning gate is enabled for read-only advice."
+      }
+    ],
+    "degradation": {
+      "degraded": false,
+      "level": "none",
+      "flags": {},
+      "reasons": [],
+      "effects": []
+    }
+  },
+  "power": {
+    "satisfaction": 0.42,
+    "demandKw": 1200,
+    "supplyKw": 504,
+    "state": "low"
+  },
+  "entities": {
+    "totalCount": 26,
+    "byType": {
+      "assembling-machine": 4,
+      "inserter": 10,
+      "transport-belt": 8,
+      "electric-pole": 4
+    },
+    "representative": [
+      {
+        "unitNumber": 401,
+        "name": "assembling-machine-2",
+        "type": "assembling-machine",
+        "status": "low-power",
+        "position": {
+          "x": 43,
+          "y": 45
+        },
+        "powerState": "low-power",
+        "recipe": "electronic-circuit",
+        "inputs": [
+          {
+            "item": "iron-plate",
+            "count": 10
+          },
+          {
+            "item": "copper-cable",
+            "count": 12
+          }
+        ],
+        "outputs": [
+          {
+            "item": "electronic-circuit",
+            "count": 0
+          }
+        ],
+        "fluids": []
+      },
+      {
+        "unitNumber": 416,
+        "name": "inserter",
+        "type": "inserter",
+        "status": "low-power",
+        "position": {
+          "x": 42,
+          "y": 45
+        },
+        "powerState": "low-power"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "code": "low-power",
+      "severity": "error",
+      "subjectUnitNumber": null,
+      "subjectName": null,
+      "message": "Electric network under-supplied: satisfaction is 42%.",
+      "evidence": {
+        "satisfaction": 0.42,
+        "demandKw": 1200,
+        "supplyKw": 504
+      },
+      "tick": 127200
+    }
+  ],
+  "omitted": {
+    "entityCount": 0,
+    "reason": "none",
+    "caps": {
+      "representative": 8,
+      "byType": 64
+    }
+  },
+  "truncated": false,
+  "expectedDiagnosis": [
+    {
+      "findingCode": "low-power",
+      "summary": "Power supply meets only 42% of demand; add generation or reduce load.",
+      "primary": true
+    }
+  ]
+}

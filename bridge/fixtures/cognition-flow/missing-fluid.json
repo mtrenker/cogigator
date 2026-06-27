@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "cogigator.snapshot.v1",
+  "experimentId": "industrial-cognition-ab",
+  "scenarioId": "missing-fluid",
+  "variant": {
+    "experimentId": "industrial-cognition-ab",
+    "variantId": "cognition-flow",
+    "variantLetter": "A",
+    "variantLabel": "Sightline + Cognition Flow",
+    "inspiredBy": "claude-opus-4-8",
+    "stationKind": "core",
+    "stationLabel": "Cogigator Core",
+    "capacityKeys": [
+      "sightline",
+      "cognitionFlow",
+      "cognitionBuffer",
+      "memory"
+    ],
+    "degradationFlags": [
+      "overloaded"
+    ],
+    "tagline": "Two scarcities: where it can look, and how hard it can think."
+  },
+  "requestId": "00000000-0000-0000-0000-000000000000",
+  "serverTime": "2026-06-26T00:00:00Z",
+  "factorio": {
+    "version": "2.0.x",
+    "save": "spike-fixture"
+  },
+  "station": {
+    "stationId": "core-1",
+    "stationKind": "core",
+    "stationLabel": "Cogigator Core",
+    "permissionMode": "read-only-advisor",
+    "transportHealth": "ok",
+    "status": "live"
+  },
+  "worksite": {
+    "surface": "nauvis",
+    "bounds": {
+      "left": 0,
+      "top": 32,
+      "right": 32,
+      "bottom": 64
+    },
+    "width": 32,
+    "height": 32
+  },
+  "tick": 126000,
+  "cognition": {
+    "model": "cognition-flow",
+    "capacities": [
+      {
+        "key": "sightline",
+        "label": "Sightline",
+        "value": 1024,
+        "limit": 1024,
+        "unit": "tiles^2",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Entire worksite is visible."
+      },
+      {
+        "key": "cognitionFlow",
+        "label": "Cognition Flow",
+        "value": 24,
+        "limit": 20,
+        "unit": "cog/min",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Flow meets deterministic report demand."
+      },
+      {
+        "key": "cognitionBuffer",
+        "label": "Cognition Buffer",
+        "value": 80,
+        "limit": 60,
+        "unit": "cog",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Buffer has enough reserve for this report."
+      },
+      {
+        "key": "memory",
+        "label": "Memory",
+        "value": 8,
+        "limit": 6,
+        "unit": "units",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Recent observations are retained."
+      }
+    ],
+    "degradation": {
+      "degraded": false,
+      "level": "none",
+      "flags": {
+        "overloaded": false
+      },
+      "reasons": [],
+      "effects": []
+    }
+  },
+  "power": {
+    "satisfaction": 1,
+    "demandKw": 920,
+    "supplyKw": 920,
+    "state": "ok"
+  },
+  "entities": {
+    "totalCount": 20,
+    "byType": {
+      "assembling-machine": 1,
+      "pipe": 9,
+      "pipe-to-ground": 2,
+      "inserter": 4,
+      "transport-belt": 4
+    },
+    "representative": [
+      {
+        "unitNumber": 301,
+        "name": "assembling-machine-2",
+        "type": "assembling-machine",
+        "status": "fluid-ingredient-shortage",
+        "position": {
+          "x": 9,
+          "y": 41
+        },
+        "powerState": "working",
+        "recipe": "sulfur",
+        "inputs": [
+          {
+            "item": "petroleum-gas",
+            "count": 0
+          },
+          {
+            "item": "water",
+            "count": 0
+          }
+        ],
+        "outputs": [
+          {
+            "item": "sulfur",
+            "count": 0
+          }
+        ],
+        "fluids": [
+          {
+            "fluid": "petroleum-gas",
+            "amount": 0
+          },
+          {
+            "fluid": "water",
+            "amount": 0
+          }
+        ]
+      },
+      {
+        "unitNumber": 309,
+        "name": "pipe",
+        "type": "pipe",
+        "status": "empty",
+        "position": {
+          "x": 8,
+          "y": 41
+        },
+        "powerState": "working",
+        "fluids": [
+          {
+            "fluid": "petroleum-gas",
+            "amount": 0
+          }
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "code": "missing-fluid",
+      "severity": "error",
+      "subjectUnitNumber": 301,
+      "subjectName": "assembling-machine-2",
+      "message": "Sulfur machine missing petroleum-gas fluid input.",
+      "evidence": {
+        "fluid": "petroleum-gas",
+        "amount": 0
+      },
+      "tick": 126000
+    }
+  ],
+  "omitted": {
+    "entityCount": 0,
+    "reason": "none",
+    "caps": {
+      "representative": 8,
+      "byType": 64
+    }
+  },
+  "truncated": false,
+  "expectedDiagnosis": [
+    {
+      "findingCode": "missing-fluid",
+      "summary": "Sulfur production is waiting on petroleum-gas; connect or fill the fluid line.",
+      "primary": true
+    }
+  ]
+}

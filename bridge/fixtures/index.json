@@ -1,0 +1,17 @@
+{
+  "experimentId": "industrial-cognition-ab",
+  "schemaVersion": "cogigator.snapshot.v1",
+  "fixtureLayout": "bridge/fixtures/<variantId>/<scenarioId>.json",
+  "variants": [
+    "cognition-flow",
+    "capacity-vector"
+  ],
+  "scenarios": [
+    "starved-assembler",
+    "blocked-output",
+    "missing-fluid",
+    "low-power",
+    "under-computed",
+    "dense-cell-truncated"
+  ]
+}

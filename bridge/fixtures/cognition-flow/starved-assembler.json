@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "cogigator.snapshot.v1",
+  "experimentId": "industrial-cognition-ab",
+  "scenarioId": "starved-assembler",
+  "variant": {
+    "experimentId": "industrial-cognition-ab",
+    "variantId": "cognition-flow",
+    "variantLetter": "A",
+    "variantLabel": "Sightline + Cognition Flow",
+    "inspiredBy": "claude-opus-4-8",
+    "stationKind": "core",
+    "stationLabel": "Cogigator Core",
+    "capacityKeys": [
+      "sightline",
+      "cognitionFlow",
+      "cognitionBuffer",
+      "memory"
+    ],
+    "degradationFlags": [
+      "overloaded"
+    ],
+    "tagline": "Two scarcities: where it can look, and how hard it can think."
+  },
+  "requestId": "00000000-0000-0000-0000-000000000000",
+  "serverTime": "2026-06-26T00:00:00Z",
+  "factorio": {
+    "version": "2.0.x",
+    "save": "spike-fixture"
+  },
+  "station": {
+    "stationId": "core-1",
+    "stationKind": "core",
+    "stationLabel": "Cogigator Core",
+    "permissionMode": "read-only-advisor",
+    "transportHealth": "ok",
+    "status": "live"
+  },
+  "worksite": {
+    "surface": "nauvis",
+    "bounds": {
+      "left": 0,
+      "top": 0,
+      "right": 32,
+      "bottom": 32
+    },
+    "width": 32,
+    "height": 32
+  },
+  "tick": 123456,
+  "cognition": {
+    "model": "cognition-flow",
+    "capacities": [
+      {
+        "key": "sightline",
+        "label": "Sightline",
+        "value": 1024,
+        "limit": 1024,
+        "unit": "tiles^2",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Entire worksite is visible."
+      },
+      {
+        "key": "cognitionFlow",
+        "label": "Cognition Flow",
+        "value": 24,
+        "limit": 20,
+        "unit": "cog/min",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Flow meets deterministic report demand."
+      },
+      {
+        "key": "cognitionBuffer",
+        "label": "Cognition Buffer",
+        "value": 80,
+        "limit": 60,
+        "unit": "cog",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Buffer has enough reserve for this report."
+      },
+      {
+        "key": "memory",
+        "label": "Memory",
+        "value": 8,
+        "limit": 6,
+        "unit": "units",
+        "satisfied": true,
+        "bottleneck": false,
+        "note": "Recent observations are retained."
+      }
+    ],
+    "degradation": {
+      "degraded": false,
+      "level": "none",
+      "flags": {
+        "overloaded": false
+      },
+      "reasons": [],
+      "effects": []
+    }
+  },
+  "power": {
+    "satisfaction": 1,
+    "demandKw": 680,
+    "supplyKw": 680,
+    "state": "ok"
+  },
+  "entities": {
+    "totalCount": 18,
+    "byType": {
+      "assembling-machine": 2,
+      "transport-belt": 8,
+      "inserter": 6,
+      "electric-pole": 2
+    },
+    "representative": [
+      {
+        "unitNumber": 101,
+        "name": "assembling-machine-2",
+        "type": "assembling-machine",
+        "status": "item-ingredient-shortage",
+        "position": {
+          "x": 6,
+          "y": 8
+        },
+        "powerState": "working",
+        "recipe": "iron-gear-wheel",
+        "inputs": [
+          {
+            "item": "iron-plate",
+            "count": 0
+          }
+        ],
+        "outputs": [
+          {
+            "item": "iron-gear-wheel",
+            "count": 0
+          }
+        ],
+        "fluids": []
+      },
+      {
+        "unitNumber": 112,
+        "name": "transport-belt",
+        "type": "transport-belt",
+        "status": "empty",
+        "position": {
+          "x": 5,
+          "y": 8
+        },
+        "powerState": "working",
+        "inputs": [],
+        "outputs": [],
+        "fluids": []
+      }
+    ]
+  },
+  "findings": [
+    {
+      "code": "input-starved",
+      "severity": "error",
+      "subjectUnitNumber": 101,
+      "subjectName": "assembling-machine-2",
+      "message": "Assembler starved: input iron-plate empty.",
+      "evidence": {
+        "item": "iron-plate",
+        "count": 0
+      },
+      "tick": 123456
+    },
+    {
+      "code": "belt-starved",
+      "severity": "warning",
+      "subjectUnitNumber": 112,
+      "subjectName": "transport-belt",
+      "message": "Input belt is empty upstream of the assembler.",
+      "evidence": {
+        "item": "iron-plate",
+        "beltItems": 0
+      },
+      "tick": 123456
+    }
+  ],
+  "omitted": {
+    "entityCount": 0,
+    "reason": "none",
+    "caps": {
+      "representative": 8,
+      "byType": 64
+    }
+  },
+  "truncated": false,
+  "expectedDiagnosis": [
+    {
+      "findingCode": "input-starved",
+      "summary": "Gear assembler starved: no iron-plate reaches the input belt.",
+      "primary": true
+    },
+    {
+      "findingCode": "belt-starved",
+      "summary": "Upstream belt segment is empty, confirming the missing feed.",
+      "primary": false
+    }
+  ]
+}
