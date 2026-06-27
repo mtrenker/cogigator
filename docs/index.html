@@ -548,12 +548,33 @@
           <p>The synthesis is now visible inside Factorio. Cogigator adds placeable Field Stations,
             Cognition Processors, Memory Banks, and Planning Relays, while runtime behavior remains
             deliberately narrow: placing a Field Station registers it and assigns a default 32×32
-            read-only worksite; removing it clears both counts. There is still no live bridge link and
-            no assistant-controlled mutation path.</p>
+            read-only worksite; removing it clears both counts. There is still no assistant-controlled
+            mutation path.</p>
           <div class="reads">
             <a href="experiments/2026-06-27-industrial-cognition-synthesis.md"><span class="arr">▸</span> Read the synthesis status</a>
             <a href="experiments/2026-06-27-industrial-cognition-synthesis.probe.md"><span class="arr">▸</span> Run the comprehension probe</a>
             <a href="experiments/2026-06-26-industrial-cognition-ab.review.md"><span class="arr">▸</span> Revisit the safety gate</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="node">16</div>
+        <div class="card">
+          <div class="commit-row">
+            <span class="hash">live-local</span>
+            <span class="date">2026-06-27</span>
+            <span class="file-pill">Factorio export · WSL bridge · same snapshot path</span>
+          </div>
+          <h3>A local save reaches the bridge</h3>
+          <p>The first live read path is working without touching the real server. A local Windows
+            Factorio save exports one read-only snapshot to <code>script-output</code>, and the WSL
+            bridge serves it as <code>scenarioId=live-local</code> through the same Pi-compatible
+            snapshot endpoint as the fixtures. This is still local-only and file-based: no socket in
+            the mod, no RCON, no Kubernetes deployment, and no assistant-controlled action path.</p>
+          <div class="reads">
+            <a href="experiments/2026-06-27-live-local-snapshot-runbook.md"><span class="arr">▸</span> Follow the live-local runbook</a>
+            <a href="experiments/2026-06-27-industrial-cognition-synthesis.md"><span class="arr">▸</span> Read the updated synthesis status</a>
           </div>
         </div>
       </div>
@@ -740,6 +761,7 @@
       <a href="experiments/2026-06-26-industrial-cognition-ab.review.md">review</a> ·
       <a href="experiments/2026-06-27-industrial-cognition-synthesis.md">synthesis</a> ·
       <a href="experiments/2026-06-27-industrial-cognition-synthesis.probe.md">probe</a> ·
+      <a href="experiments/2026-06-27-live-local-snapshot-runbook.md">live-local</a> ·
       <a href="DEVELOPMENT_PROCESS.md">process</a>
     </p>
     <p class="mono" style="margin-top:18px;color:var(--cream-faint)">
