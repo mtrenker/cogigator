@@ -92,6 +92,20 @@ function M.get(state, station_id)
   return state and state.stations[station_id]
 end
 
+--- Retrieve a station entry by Factorio unit_number.
+--- @param state   table
+--- @param unit_number  int
+--- @return table|nil
+function M.get_by_unit(state, unit_number)
+  if not state then return nil end
+  for _, entry in pairs(state.stations) do
+    if entry.unit_number == unit_number then
+      return entry
+    end
+  end
+  return nil
+end
+
 --- Return all station entries as an array.
 --- @param state   table
 --- @return table[]

@@ -18,6 +18,7 @@ local metrics     = require("scripts.common.metrics")
 local global = storage or global
 
 local COGIGATOR_FIELD_STATION = "cogigator-field-station"
+local DEFAULT_WORKSITE_SIZE = 32
 
 -- ---------------------------------------------------------------------------
 -- Active variant module (lazy-loaded based on startup setting)
@@ -93,6 +94,18 @@ local function entity_is_field_station(entity)
   return entity and entity.valid and entity.name == COGIGATOR_FIELD_STATION
 end
 
+local function default_worksite_bounds(entity)
+  local half = DEFAULT_WORKSITE_SIZE / 2
+  local x = math.floor(entity.position.x)
+  local y = math.floor(entity.position.y)
+  return {
+    left = x - half,
+    top = y - half,
+    right = x + half,
+    bottom = y + half,
+  }
+end
+
 local function on_station_built(event)
   local entity = event.created_entity or event.entity
   if not entity_is_field_station(entity) then return end
@@ -100,13 +113,23 @@ local function on_station_built(event)
   ensure_state()
   local variant_id = global.cogigator.active_variant_id
     or settings.startup["cogigator-active-variant"].value
-  registry.register(global.cogigator.registry, entity, variant_id)
+  local station_id = registry.register(global.cogigator.registry, entity, variant_id)
+  worksites.assign(
+    global.cogigator.worksites,
+    station_id,
+    entity.surface.name,
+    default_worksite_bounds(entity)
+  )
 end
 
 local function on_station_removed(event)
   local entity = event.entity
   if not entity_is_field_station(entity) then return end
   ensure_state()
+  local station = registry.get_by_unit(global.cogigator.registry, entity.unit_number)
+  if station then
+    worksites.release(global.cogigator.worksites, station.station_id)
+  end
   registry.unregister_by_unit(global.cogigator.registry, entity.unit_number)
 end
 
@@ -184,6 +207,40 @@ commands.add_command(
     end
     reply("[cogigator] Active variant set to: " .. new_id
       .. " (runtime only; restart to persist)")
+  end
+)
+
+-- /cogigator-worksites
+-- Print assigned read-only worksite bounds.
+commands.add_command(
+  "cogigator-worksites",
+  { "cogigator-cmd-worksites-help" },
+  function(event)
+    ensure_state()
+    local player = event.player_index and game.get_player(event.player_index)
+    local function reply(msg)
+      if player then player.print(msg) else log(msg) end
+    end
+
+    local sites = worksites.all(global.cogigator.worksites)
+    if #sites == 0 then
+      reply("[cogigator] no worksites assigned")
+      return
+    end
+
+    for _, site in ipairs(sites) do
+      reply(string.format(
+        "[cogigator] worksite station=%s surface=%s bounds=[%d,%d,%d,%d] size=%dx%d",
+        site.station_id,
+        site.surface,
+        site.bounds.left,
+        site.bounds.top,
+        site.bounds.right,
+        site.bounds.bottom,
+        site.width,
+        site.height
+      ))
+    end
   end
 )
 
