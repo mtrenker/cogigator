@@ -3,9 +3,11 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
+import { deflateSync } from 'node:zlib';
 
 const BRIDGE_SCHEMA_VERSION = 'cogigator.bridge.v1';
 const ANALYZE_SCHEMA_VERSION = 'cogigator.analyze.v1';
+const BLUEPRINT_SCHEMA_VERSION = 'cogigator.blueprint-proposal.v1';
 const BRIDGE_VERSION = '0.1.0-local';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixturesDir = join(__dirname, 'fixtures');
@@ -159,6 +161,87 @@ function explainCognition(snapshot) {
   ].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
 }
 
+function encodeBlueprint(blueprint) {
+  const json = JSON.stringify(blueprint);
+  return `0${deflateSync(Buffer.from(json)).toString('base64')}`;
+}
+
+function draftEntitiesForFinding(snapshot, findingCode) {
+  const subject = snapshot.entities?.representative?.find((entity) =>
+    snapshot.findings?.some((finding) => finding.subjectUnitNumber === entity.unitNumber)
+  ) ?? snapshot.entities?.representative?.[0];
+  const origin = subject?.position ?? { x: 0, y: 0 };
+
+  if (findingCode === 'input-starved' || findingCode === 'belt-starved') {
+    return {
+      summary: 'Feed the starved machine from the west with a short belt and inserter starter layout.',
+      caution: 'Draft uses generic yellow belts/inserter. Verify orientation, recipe ingredients, and existing belts before stamping.',
+      entities: [
+        { entity_number: 1, name: 'transport-belt', position: { x: origin.x - 3, y: origin.y }, direction: 2 },
+        { entity_number: 2, name: 'transport-belt', position: { x: origin.x - 2, y: origin.y }, direction: 2 },
+        { entity_number: 3, name: 'transport-belt', position: { x: origin.x - 1, y: origin.y }, direction: 2 },
+        { entity_number: 4, name: 'inserter', position: { x: origin.x - 1, y: origin.y - 1 }, direction: 4 },
+      ],
+    };
+  }
+
+  if (findingCode === 'output-blocked' || findingCode === 'belt-backed-up') {
+    return {
+      summary: 'Pull output east from the blocked machine with a short belt and inserter starter layout.',
+      caution: 'Draft is a generic unblocking stub. Verify output side and downstream routing before stamping.',
+      entities: [
+        { entity_number: 1, name: 'inserter', position: { x: origin.x + 1, y: origin.y - 1 }, direction: 2 },
+        { entity_number: 2, name: 'transport-belt', position: { x: origin.x + 1, y: origin.y }, direction: 2 },
+        { entity_number: 3, name: 'transport-belt', position: { x: origin.x + 2, y: origin.y }, direction: 2 },
+        { entity_number: 4, name: 'transport-belt', position: { x: origin.x + 3, y: origin.y }, direction: 2 },
+      ],
+    };
+  }
+
+  return {
+    summary: 'No safe deterministic blueprint draft exists for this finding yet; provide a manual build plan instead.',
+    caution: 'Unsupported finding for blueprint string generation. Do not stamp blindly.',
+    entities: [],
+  };
+}
+
+function buildBlueprintProposal(snapshot, intent = '') {
+  const primaryDiagnosis = snapshot.expectedDiagnosis?.find((entry) => entry.primary);
+  const primaryFindingCode = primaryDiagnosis?.findingCode ?? snapshot.findings?.[0]?.code ?? null;
+  const draft = draftEntitiesForFinding(snapshot, primaryFindingCode);
+  const label = `Cogigator draft: ${snapshot.scenarioId ?? 'snapshot'} / ${primaryFindingCode ?? 'none'}`;
+  const blueprint = {
+    blueprint: {
+      item: 'blueprint',
+      label,
+      description: [
+        'Cogigator proposal only. Human must inspect before placing.',
+        draft.caution,
+      ].join(' '),
+      entities: draft.entities,
+      version: 562949954142208,
+    },
+  };
+
+  return {
+    schemaVersion: BLUEPRINT_SCHEMA_VERSION,
+    requestId: randomUUID(),
+    serverTime: nowIso(),
+    experimentId: snapshot.experimentId,
+    scenarioId: snapshot.scenarioId,
+    variantId: snapshot.variant?.variantId,
+    intent,
+    mode: 'proposal-only',
+    mutation: false,
+    primaryFindingCode,
+    summary: draft.summary,
+    caution: draft.caution,
+    blueprintJson: blueprint,
+    blueprintString: draft.entities.length > 0 ? encodeBlueprint(blueprint) : null,
+    humanApprovalRequired: true,
+  };
+}
+
 function analyzeSnapshot(snapshot, question = '') {
   const primaryDiagnosis = snapshot.expectedDiagnosis?.find((entry) => entry.primary);
   const primaryFindingCode = primaryDiagnosis?.findingCode ?? snapshot.findings[0]?.code ?? null;
@@ -221,7 +304,8 @@ async function route(req, res) {
     return sendJson(res, 200, responseEnvelope({
       bridgeVersion: BRIDGE_VERSION,
       snapshotSchema: index.schemaVersion,
-      analyzeSchema: ANALYZE_SCHEMA_VERSION
+      analyzeSchema: ANALYZE_SCHEMA_VERSION,
+      blueprintSchema: BLUEPRINT_SCHEMA_VERSION
     }));
   }
 
@@ -253,6 +337,15 @@ async function route(req, res) {
     }
     const snapshot = await loadSnapshot(body.scenarioId, body.variantId);
     return sendJson(res, 200, analyzeSnapshot(snapshot, body.question ?? ''));
+  }
+
+  if (req.method === 'POST' && url.pathname === '/blueprint-proposal') {
+    const body = await readRequestJson(req);
+    if (!body.scenarioId || !body.variantId) {
+      return sendError(res, 400, 'Request body requires scenarioId and variantId');
+    }
+    const snapshot = await loadSnapshot(body.scenarioId, body.variantId);
+    return sendJson(res, 200, buildBlueprintProposal(snapshot, body.intent ?? ''));
   }
 
   return sendError(res, 404, `No route for ${req.method} ${url.pathname}`);

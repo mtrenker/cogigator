@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { after, before, describe, it } from 'node:test';
+import { inflateSync } from 'node:zlib';
 import { createBridgeServer, loadFixtureIndex } from './server.mjs';
 
 let server;
@@ -105,6 +106,30 @@ describe('local bridge stub', () => {
       ['input-starved', 'belt-starved']
     );
     assert.match(body.cognitionExplanation, /deterministic fixture diagnostics/);
+  });
+
+  it('returns proposal-only blueprint drafts without mutating state', async () => {
+    const { response, body } = await requestJson('/blueprint-proposal', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        scenarioId: 'starved-assembler',
+        variantId: 'capacity-vector',
+        intent: 'Fix the starved assembler'
+      })
+    });
+
+    assert.equal(response.status, 200);
+    assert.equal(body.schemaVersion, 'cogigator.blueprint-proposal.v1');
+    assert.equal(body.mode, 'proposal-only');
+    assert.equal(body.mutation, false);
+    assert.equal(body.humanApprovalRequired, true);
+    assert.equal(body.primaryFindingCode, 'input-starved');
+    assert.ok(body.blueprintString.startsWith('0'));
+
+    const decoded = JSON.parse(inflateSync(Buffer.from(body.blueprintString.slice(1), 'base64')).toString('utf8'));
+    assert.equal(decoded.blueprint.item, 'blueprint');
+    assert.ok(decoded.blueprint.entities.length > 0);
   });
 
   it('rejects missing and unknown snapshot parameters', async () => {

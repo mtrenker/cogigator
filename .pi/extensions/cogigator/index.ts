@@ -201,6 +201,32 @@ function formatSnapshot(snapshot: any): string {
   return lines.join("\n");
 }
 
+function formatBlueprintProposal(result: any): string {
+  const lines: string[] = [
+    "=== Cogigator Blueprint Proposal ===",
+    `Mode:             ${result.mode ?? "proposal-only"}`,
+    `Mutation:         ${result.mutation === true ? "yes" : "no"}`,
+    `Scenario:         ${result.scenarioId ?? "?"}`,
+    `Variant:          ${result.variantId ?? "?"}`,
+    `Primary finding:  ${result.primaryFindingCode ?? "none"}`,
+    `Human approval:   ${result.humanApprovalRequired ? "required" : "unknown"}`,
+    "",
+    `Summary:`,
+    `  ${result.summary ?? "No summary."}`,
+    "",
+    `Caution:`,
+    `  ${result.caution ?? "Inspect before placing."}`,
+  ];
+
+  if (result.blueprintString) {
+    lines.push("", "Blueprint string:", result.blueprintString);
+  } else {
+    lines.push("", "Blueprint string: unavailable for this finding.");
+  }
+
+  return lines.join("\n");
+}
+
 function formatAnalysis(result: any): string {
   const citations = result.citations ?? {};
   const findings: any[] = result.findings ?? [];
@@ -483,6 +509,81 @@ export default function cogigator(pi: ExtensionAPI): void {
   });
 
   // -------------------------------------------------------------------------
+  // Tool: cogigator_blueprint_proposal
+  // -------------------------------------------------------------------------
+
+  pi.registerTool({
+    name: "cogigator_blueprint_proposal",
+    label: "Cogigator Blueprint Proposal",
+    description:
+      "Ask the Cogigator bridge for a proposal-only Factorio blueprint draft " +
+      "for a given scenario and variant. The result may include a blueprint " +
+      "string, but it never applies changes to the world. Human inspection and " +
+      "manual placement are required.",
+    promptSnippet:
+      "cogigator_blueprint_proposal(scenarioId, variantId[, intent]) — draft a blueprint proposal",
+    promptGuidelines:
+      "Use only for proposal-only blueprint drafting. Never imply the blueprint " +
+      "has been applied. Always show the caution and require the human to inspect " +
+      "before importing/placing.",
+    parameters: Type.Object({
+      scenarioId: Type.String({
+        description:
+          "Scenario ID: starved-assembler | blocked-output | missing-fluid | " +
+          "low-power | under-computed | dense-cell-truncated | live-local",
+      }),
+      variantId: Type.String({
+        description:
+          "Variant ID: cognition-flow | capacity-vector",
+      }),
+      intent: Type.Optional(
+        Type.String({
+          description:
+            "Optional natural-language build goal, e.g. 'fix the starved assembler'.",
+        }),
+      ),
+    }),
+
+    async execute(_id, params, signal, onUpdate, ctx) {
+      const { scenarioId, variantId, intent } = params;
+
+      onUpdate?.({
+        content: [
+          {
+            type: "text",
+            text: `Drafting proposal-only blueprint: ${scenarioId} / ${variantId}…`,
+          },
+        ],
+      });
+
+      const result = (await bridgeFetch(
+        state,
+        "/blueprint-proposal",
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            scenarioId,
+            variantId,
+            intent: intent ?? "",
+          }),
+        },
+        signal ?? undefined,
+      )) as any;
+
+      state.connected = true;
+      if (ctx?.hasUI) {
+        ctx.ui.setStatus(STATUS_KEY, statusLine(state));
+      }
+
+      return {
+        content: [{ type: "text", text: formatBlueprintProposal(result) }],
+        details: result,
+      };
+    },
+  });
+
+  // -------------------------------------------------------------------------
   // Command: /cogigator-connect
   // -------------------------------------------------------------------------
 
@@ -718,6 +819,47 @@ export default function cogigator(pi: ExtensionAPI): void {
             `Failed to fetch experiment: ${err.message}`,
             "error",
           );
+        }
+      }
+    },
+  });
+
+  // -------------------------------------------------------------------------
+  // Command: /cogigator-blueprint
+  // -------------------------------------------------------------------------
+
+  pi.registerCommand("cogigator-blueprint", {
+    description:
+      "Draft a proposal-only Factorio blueprint. " +
+      "Usage: /cogigator-blueprint [scenarioId] [variantId] [intent...]",
+
+    async handler(args, ctx) {
+      const parts = args.trim().split(/\s+/).filter(Boolean);
+      const scenarioId = parts[0] ?? "live-local";
+      const variantId = parts[1] ?? VARIANT_IDS[0];
+      const intent = parts.slice(2).join(" ");
+
+      try {
+        const result = (await bridgeFetch(
+          state,
+          "/blueprint-proposal",
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ scenarioId, variantId, intent }),
+          },
+        )) as any;
+
+        state.connected = true;
+        if (ctx.hasUI) {
+          ctx.ui.setStatus(STATUS_KEY, statusLine(state));
+          ctx.ui.notify(formatBlueprintProposal(result), "info");
+        }
+      } catch (err: any) {
+        state.connected = false;
+        if (ctx.hasUI) {
+          ctx.ui.setStatus(STATUS_KEY, statusLine(state));
+          ctx.ui.notify(`Blueprint proposal error: ${err.message}`, "error");
         }
       }
     },
