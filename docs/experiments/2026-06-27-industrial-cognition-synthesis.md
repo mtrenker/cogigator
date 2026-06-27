@@ -98,17 +98,20 @@ Primary synthesis tests:
 
 ## Current prototype status
 
-The first synthesis pass is wording-only:
+The synthesis prototype now has two read-only layers:
 
-- bridge fixtures now use Cognition Network language for degraded/truncated snapshots;
-- mod-side variant helpers and locale strings now point players toward concrete factory actions: add Field Stations, Cognition Processors, Memory Banks, or a Planning Relay;
-- no schema, bridge API, or mutation behavior changed.
+- bridge fixtures use Cognition Network language for degraded/truncated snapshots;
+- mod-side variant helpers and locale strings point players toward concrete factory actions: add Field Stations, Cognition Processors, Memory Banks, or a Planning Relay;
+- the Factorio mod defines an in-game entity shell for those four structures so the network can be placed and discussed in-game;
+- runtime code observes Field Station placement/removal for registry counts only;
+- no schema, bridge API, assistant action, or world-mutation behavior changed.
 
 ## Acceptance criteria
 
 - Same bridge/Pi path remains read-only and variant-agnostic.
 - No live Factorio/Kubernetes validation required yet.
-- No mutation path exists.
+- No assistant mutation path exists.
+- Placing/removing the new entity shell is normal player-driven Factorio behavior; Cogigator only observes Field Station placement for status counts.
 - Pi output names the degraded capacity and suggests a factory action.
 - The manual comprehension probe succeeds for at least one degraded scenario.
 - The scorecard can be updated without inventing a third schema.

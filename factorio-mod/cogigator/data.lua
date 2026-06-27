@@ -1,8 +1,9 @@
 -- cogigator/data.lua
 -- Data stage entry point.
--- Registers any prototype definitions for this mod.
--- Currently empty — the cogigator is a read-only observation mod with no
--- custom entities in the spike. Placeholder prototypes can be added here
--- for future tasks (e.g. a custom observation-station entity).
+-- Registers read-only Cognition Network entity shells for the synthesis pass.
+--
+-- These prototypes make the design visible in-game. They do not grant the mod
+-- any world-mutation capability; runtime code only observes placement/removal
+-- of Cogigator Field Stations for status/registry bookkeeping.
 
--- require("prototypes.station")  -- uncomment when custom entities are needed
+require("prototypes.cognition-network")

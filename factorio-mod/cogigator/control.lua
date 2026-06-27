@@ -13,6 +13,12 @@ local worksites   = require("scripts.common.worksites")
 local reports     = require("scripts.common.reports")
 local metrics     = require("scripts.common.metrics")
 
+-- Factorio 2.0 renamed the persistent mod table from `global` to `storage`.
+-- Keep the rest of the spike code readable while targeting 2.0.
+local global = storage or global
+
+local COGIGATOR_FIELD_STATION = "cogigator-field-station"
+
 -- ---------------------------------------------------------------------------
 -- Active variant module (lazy-loaded based on startup setting)
 -- ---------------------------------------------------------------------------
@@ -69,6 +75,54 @@ script.on_configuration_changed(function(data)
       .. global.cogigator.active_variant_id)
   end
 end)
+
+-- ---------------------------------------------------------------------------
+-- Read-only Cognition Network entity shell bookkeeping
+-- ---------------------------------------------------------------------------
+
+local function ensure_state()
+  global.cogigator = global.cogigator or {}
+  global.cogigator.registry = global.cogigator.registry or registry.init()
+  global.cogigator.worksites = global.cogigator.worksites or worksites.init()
+  global.cogigator.metrics = global.cogigator.metrics or metrics.init()
+  global.cogigator.active_variant_id = global.cogigator.active_variant_id
+    or settings.startup["cogigator-active-variant"].value
+end
+
+local function entity_is_field_station(entity)
+  return entity and entity.valid and entity.name == COGIGATOR_FIELD_STATION
+end
+
+local function on_station_built(event)
+  local entity = event.created_entity or event.entity
+  if not entity_is_field_station(entity) then return end
+
+  ensure_state()
+  local variant_id = global.cogigator.active_variant_id
+    or settings.startup["cogigator-active-variant"].value
+  registry.register(global.cogigator.registry, entity, variant_id)
+end
+
+local function on_station_removed(event)
+  local entity = event.entity
+  if not entity_is_field_station(entity) then return end
+  ensure_state()
+  registry.unregister_by_unit(global.cogigator.registry, entity.unit_number)
+end
+
+script.on_event({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+}, on_station_built)
+
+script.on_event({
+  defines.events.on_player_mined_entity,
+  defines.events.on_robot_mined_entity,
+  defines.events.on_entity_died,
+  defines.events.script_raised_destroy,
+}, on_station_removed)
 
 -- ---------------------------------------------------------------------------
 -- Console commands (all read-only)
