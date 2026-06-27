@@ -1,0 +1,440 @@
+{
+  "name": "red-science-same-side",
+  "footprint": {
+    "left": -4,
+    "top": -2,
+    "right": 5,
+    "bottom": 11,
+    "width": 10,
+    "height": 14
+  },
+  "io": {
+    "side": "west",
+    "input": "x=-2 vertical belt, copper plates + iron gear wheels on lanes",
+    "output": "x=-4 vertical belt, automation science packs"
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "blueprint": {
+    "blueprint": {
+      "item": "blueprint",
+      "label": "Red science same-side I/O v2",
+      "description": "Proposal-only compact red science block. West side I/O: x=-2 mixed input belt, x=-4 science output belt. Verify inserter reach/orientation after import.",
+      "icons": [
+        {
+          "signal": {
+            "type": "item",
+            "name": "automation-science-pack"
+          },
+          "index": 1
+        }
+      ],
+      "entities": [
+        {
+          "entity_number": 1,
+          "name": "assembling-machine-1",
+          "position": {
+            "x": 1.5,
+            "y": 0
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 2,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": -1
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 3,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": 1
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 4,
+          "name": "assembling-machine-1",
+          "position": {
+            "x": 1.5,
+            "y": 3
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 5,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": 2
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 6,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": 4
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 7,
+          "name": "assembling-machine-1",
+          "position": {
+            "x": 1.5,
+            "y": 6
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 8,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": 5
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 9,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": 7
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 10,
+          "name": "assembling-machine-1",
+          "position": {
+            "x": 1.5,
+            "y": 9
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 11,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": 8
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 12,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": -0.5,
+            "y": 10
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 13,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": -2
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 14,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": -2
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 15,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": -1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 16,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": -1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 17,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 0
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 18,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 0
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 19,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 20,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 21,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 2
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 22,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 2
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 23,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 3
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 24,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 3
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 25,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 4
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 26,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 4
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 27,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 5
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 28,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 5
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 29,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 6
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 30,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 6
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 31,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 7
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 32,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 7
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 33,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 8
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 34,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 8
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 35,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 9
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 36,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 9
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 37,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 10
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 38,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 10
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 39,
+          "name": "transport-belt",
+          "position": {
+            "x": -2,
+            "y": 11
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 40,
+          "name": "transport-belt",
+          "position": {
+            "x": -4,
+            "y": 11
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 41,
+          "name": "small-electric-pole",
+          "position": {
+            "x": 4,
+            "y": -1
+          }
+        },
+        {
+          "entity_number": 42,
+          "name": "small-electric-pole",
+          "position": {
+            "x": 4,
+            "y": 4
+          }
+        },
+        {
+          "entity_number": 43,
+          "name": "small-electric-pole",
+          "position": {
+            "x": 4,
+            "y": 9
+          }
+        },
+        {
+          "entity_number": 44,
+          "name": "small-lamp",
+          "position": {
+            "x": 5,
+            "y": 1
+          }
+        },
+        {
+          "entity_number": 45,
+          "name": "small-lamp",
+          "position": {
+            "x": 5,
+            "y": 6
+          }
+        }
+      ],
+      "version": 562949954142208
+    }
+  },
+  "blueprintString": "0eJydl8GO2jAQhl/F8hmziXECQeoD9NSqh/ZQVZUJ3l1rHTuyzQqEePc6sMAKojLjY+zhm39+8dvJnq7MRvVe20iXe6qj6ujy09qEGrlSJq39UGsSWq1sq0iQnWJBrxX5+vSNvPNUtlah9bqP2tlU/N273gVpmLNmR1rX9bKNxH9CrIxr36bklwqRnElLsv3COOn0NhVq228iSb3jZFgWl1+6TTzvTMlP5fXzLhUH5aPyqYVsX5+cT6VRDmKIfB7Wddc7H6dJqG6dDXT5e0+DfrHSDGPHXa+S6uP0E2rTdOlJbqLrjgz20ZqlKd7oITHsWm3psjz8mdDUSEetTsjjw+6v3XQr5VPBFRaC6lZG2xfWJYXaKlamVskkfbJsTwfgtJrQHV0WqYdXre7/r+OuH7/0My51epVJ55qdzbnvx4qPhqxMHdc69Tzt8hH4LBd+w65H2CLTqFmmUVXuLPyxT3UuWzz2aZ7pU53p0yJ3luqxT00ue/7Yp7LINKrJNKosc6dZPHaqzM51WQC8ugY7emnDcFCy4XQd4fLTaXGTAjFGFXCqgFMrtNYSQK3RWiHUOVZrAYAusFIh0AarFDA+L7BKIdASqxTwp+IcqxQCRadqBoCiQwWBojMlAFB0pCBQdKIqABSdKAgUnaj6MXSGThQEik7UHABFJwoCRSdqAYCiEwWBohPVAKDoREGg6ETdvlGMUtGRAlHxtxTgRhH4awpCvaYqdNIYpkwq97plvTPqHn15qxhj8RyWGEXNclDNKErcoIzs+nvC+QtwjFAhCPVh+NZ+Vz4cd6qaN6JpKlEKzovF4fAP1ZiX0Q=="
+}

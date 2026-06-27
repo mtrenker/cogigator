@@ -62,6 +62,7 @@ The goal is not only to build a mod. The goal is to show how AI-assisted plannin
 | [`docs/experiments/2026-06-27-industrial-cognition-synthesis.probe.md`](./docs/experiments/2026-06-27-industrial-cognition-synthesis.probe.md) | Manual human comprehension probe for the synthesis. |
 | [`docs/experiments/2026-06-27-live-local-snapshot-runbook.md`](./docs/experiments/2026-06-27-live-local-snapshot-runbook.md) | Local-only live read-only snapshot export/import runbook. |
 | [`docs/experiments/2026-06-27-blueprint-proposal-mode.md`](./docs/experiments/2026-06-27-blueprint-proposal-mode.md) | Proposal-only blueprint drafting prototype. |
+| [`docs/experiments/2026-06-27-blueprint-draftsman-skill.md`](./docs/experiments/2026-06-27-blueprint-draftsman-skill.md) | Deterministic blueprint drafting workflow and first red science template. |
 | [`docs/DEVELOPMENT_PROCESS.md`](./docs/DEVELOPMENT_PROCESS.md) | How the AI-assisted documentation/planning workflow works. |
 | [`docs/experiments/`](./docs/experiments/) | Standardized experiment records. |
 
@@ -138,4 +139,4 @@ Infrastructure may be discussed only at the non-sensitive level already used in 
 
 ## Suggested next step
 
-The local read-only integration check passed, the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md) has a local in-game shell, and the bridge can ingest a local live snapshot. The current prototype is [Blueprint Proposal Mode](./docs/experiments/2026-06-27-blueprint-proposal-mode.md): Cogigator can draft proposal-only Factorio blueprint strings from a diagnosis while requiring the human to inspect/import/place them manually.
+The local read-only integration check passed, the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md) has a local in-game shell, and the bridge can ingest a local live snapshot. The current prototype is [Blueprint Proposal Mode](./docs/experiments/2026-06-27-blueprint-proposal-mode.md), now backed by a [Blueprint Draftsman workflow](./docs/experiments/2026-06-27-blueprint-draftsman-skill.md): Cogigator should draft proposal-only Factorio blueprint strings from explicit coordinate templates, then require the human to inspect/import/place them manually.
