@@ -132,6 +132,26 @@ describe('local bridge stub', () => {
     assert.ok(decoded.blueprint.entities.length > 0);
   });
 
+  it('routes red science intents through the semantic planner', async () => {
+    const { response, body } = await requestJson('/blueprint-proposal', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        scenarioId: 'starved-assembler',
+        variantId: 'capacity-vector',
+        intent: 'Create a tileable red science factory with same-side I/O'
+      })
+    });
+
+    assert.equal(response.status, 200);
+    assert.equal(body.mode, 'proposal-only');
+    assert.equal(body.mutation, false);
+    assert.equal(body.planner.name, 'red-science-planned-west-io');
+    assert.equal(body.planner.status, 'valid');
+    assert.equal(body.planner.validation.ok, true);
+    assert.ok(body.blueprintString.startsWith('0'));
+  });
+
   it('rejects missing and unknown snapshot parameters', async () => {
     const missing = await requestJson('/snapshot?scenarioId=starved-assembler');
     assert.equal(missing.response.status, 400);

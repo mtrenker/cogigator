@@ -278,6 +278,7 @@ end
 ---   opts.request_id        string|nil  Defaults zero-uuid.
 ---   opts.server_time       string|nil  ISO-8601; stamped by caller/bridge.
 ---   opts.metrics           table|nil  metrics state table to instrument.
+---   opts.surfaceScan       table|nil  Optional read-only tile summary for planners.
 ---
 --- @return table  §2 snapshot envelope (camelCase). expectedDiagnosis is never
 ---                emitted (fixtures-only, §2.7).
@@ -334,6 +335,7 @@ function M.build_snapshot(station_entry, worksite_entry, variant_descriptor, tic
     cognition     = cognition,
     power         = power_block,
     entities      = entities_block,
+    surfaceScan   = opts.surfaceScan,
     findings      = finding_list,
     omitted       = omitted,
     truncated     = truncated,

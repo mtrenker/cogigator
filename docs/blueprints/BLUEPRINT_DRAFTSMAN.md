@@ -37,6 +37,7 @@ Blueprint design must be conversational and staged. The goal is to reduce player
 - Do not claim the blueprint was placed or tested unless it was imported in Factorio.
 - Prefer small, named templates and reusable primitives over ad-hoc spatial reasoning.
 - Coordinate-only generation is not enough for production layouts; require semantic checks or human-approved golden primitives before recommending a blueprint.
+- Prefer `tools/blueprints/planner-red-science.mjs` for red science experiments because it validates belt connectivity, inserter pickup/drop, recipe assignment, tile ports, and blocked surface tiles.
 - If constraints conflict, stop and ask.
 - For Cogigator, blueprint drafting remains proposal-only: human import and placement are required.
 
@@ -45,7 +46,7 @@ Blueprint design must be conversational and staged. The goal is to reduce player
 Use this loop for layout work:
 
 ```text
-constraints -> concepts -> user picks one -> coordinate model -> preview -> blueprint string -> in-game feedback -> revision
+constraints -> concepts -> user picks one -> semantic planner/coordinate model -> preview -> blueprint string -> in-game feedback -> revision
 ```
 
 When the user says a design is weird, do not defend it. Treat the screenshot/import feedback as a failed validation and revise the model.

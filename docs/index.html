@@ -621,6 +621,27 @@
         </div>
       </div>
 
+      <div class="step">
+        <div class="node">19</div>
+        <div class="card">
+          <div class="commit-row">
+            <span class="hash">semantic planner</span>
+            <span class="date">2026-06-27</span>
+            <span class="file-pill">deterministic CAD/router prototype</span>
+          </div>
+          <h3>Blueprints become a validation problem</h3>
+          <p>The next iteration moves layout work into a programmatic planner. It accepts requirements
+            and optional live-local surface tile data, computes candidate layouts, and rejects candidates
+            where belts do not connect, inserters do not pick/drop correctly, recipes are wrong, or the
+            plan collides with blocked tiles. The model's job becomes translating player intent into
+            constraints; the tool owns deterministic blueprint mechanics.</p>
+          <div class="reads">
+            <a href="experiments/2026-06-27-semantic-blueprint-planner.md"><span class="arr">▸</span> Read the semantic planner experiment</a>
+            <a href="blueprints/red-science-planned-west-io.semantic.txt"><span class="arr">▸</span> Open the generated blueprint string</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>

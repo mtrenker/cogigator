@@ -1,0 +1,289 @@
+{
+  "name": "red-science-planned-west-io",
+  "status": "valid",
+  "requirements": {
+    "recipe": "automation-science-pack",
+    "assembler": "assembling-machine-3",
+    "assemblers": 2,
+    "belt": "express-transport-belt",
+    "inputSide": "west",
+    "outputSide": "west",
+    "tileable": "vertical",
+    "includePower": true,
+    "includeLights": true,
+    "preferCompact": true
+  },
+  "surfaceSummary": {
+    "source": "synthetic-empty-surface",
+    "blockedTiles": 0
+  },
+  "footprint": {
+    "left": -3,
+    "top": -2,
+    "right": 5,
+    "bottom": 4,
+    "width": 9,
+    "height": 7
+  },
+  "io": {
+    "side": "west",
+    "input": "x=-1 vertical express-transport-belt southbound; copper plates + iron gear wheels lane-balanced",
+    "output": "x=-2 vertical express-transport-belt northbound; automation science packs",
+    "tileDirection": "vertical; continue the two west-side belts across tile edges",
+    "ports": {
+      "externalInputs": [
+        {
+          "x": -1,
+          "y": -1
+        },
+        {
+          "x": -2,
+          "y": 4
+        }
+      ],
+      "externalOutputs": [
+        {
+          "x": -1,
+          "y": 4
+        },
+        {
+          "x": -2,
+          "y": -1
+        }
+      ]
+    }
+  },
+  "preview": [
+    "west side, semantic plan",
+    "O I > [A]",
+    "O I < [A]",
+    "O I > [A]",
+    "O I < [A]",
+    "O=output northbound, I=input southbound, >=input inserter, <=output long inserter"
+  ],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "checks": {
+      "collisions": {
+        "ok": true,
+        "errors": []
+      },
+      "belts": {
+        "ok": true,
+        "errors": []
+      },
+      "inserters": {
+        "ok": true,
+        "errors": []
+      }
+    }
+  },
+  "blueprint": {
+    "blueprint": {
+      "item": "blueprint",
+      "label": "Planned red science: semantic west I/O tile",
+      "description": "Cogigator proposal only. Deterministically planned and semantically validated for belt connectivity and inserter pickup/drop. West side I/O: x=-1 input belt southbound carries copper plates + iron gear wheels; x=-2 output belt northbound carries automation science packs.",
+      "icons": [
+        {
+          "signal": {
+            "type": "item",
+            "name": "automation-science-pack"
+          },
+          "index": 1
+        }
+      ],
+      "entities": [
+        {
+          "entity_number": 1,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": -1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 2,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": -1
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 3,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 0
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 4,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 0
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 5,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 1
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 6,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 1
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 7,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 2
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 8,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 2
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 9,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 3
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 10,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 3
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 11,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -1,
+            "y": 4
+          },
+          "direction": 4
+        },
+        {
+          "entity_number": 12,
+          "name": "express-transport-belt",
+          "position": {
+            "x": -2,
+            "y": 4
+          },
+          "direction": 0
+        },
+        {
+          "entity_number": 13,
+          "name": "assembling-machine-3",
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 14,
+          "name": "stack-inserter",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 15,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 16,
+          "name": "assembling-machine-3",
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "recipe": "automation-science-pack"
+        },
+        {
+          "entity_number": 17,
+          "name": "stack-inserter",
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "direction": 2
+        },
+        {
+          "entity_number": 18,
+          "name": "long-handed-inserter",
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "direction": 6
+        },
+        {
+          "entity_number": 19,
+          "name": "substation",
+          "position": {
+            "x": 5,
+            "y": 1.5
+          }
+        },
+        {
+          "entity_number": 20,
+          "name": "small-lamp",
+          "position": {
+            "x": 5,
+            "y": -1
+          }
+        },
+        {
+          "entity_number": 21,
+          "name": "small-lamp",
+          "position": {
+            "x": 5,
+            "y": 4
+          }
+        }
+      ],
+      "version": 562949954142208
+    }
+  },
+  "blueprintString": "0eJydlsGO2jAQhl/F8rWEhRBYSNVTe+mpvfVQVZVJpjBax7ZshyVCefeOwy5ZLWkDPiCU2P7m02+NnRPfyhqMReV5fuLooeL5m3cTLsUWJL37LoVSUDJLP1cgqAJy5qASymPBnsF59vXhG/MogVaV4AqLxqNWtPaz3uFOeG2ZsdpoJyTTSjZT9gU82AoVOoIIKRtmXsoIVV7o3cBBSCyFp6E/xCEnzwpNUwuPB/RNtwCVA0tEZrB4qs1DSdWm7Edwc1hCEMzZ8VMyp5mm9meK07Xfb3VN6wthLYIjsDGBIqmeYx8YWq3YDoRlz3sA6T4GSMpo4YWitH1PEbXXlQgRvAbGjCie3JTyQXJ3PP954g53SsgQvm8MUFjdHky4ElV46iHJCyQJEN4SQ5Vw5Pm8/TXhQDl5Ktohu4fmt6qrLViacIHB0VhwLvFWKGfIOAnuVIz2BM97deKETGhJE/6oSok2ZBzGsnZyBU/vh6eD8NkAfBFrPhsXz2LFZ+Pey1jvGwJfxXrfkPdjrHc67r2O9U7HvTex3otx7/ksVnwxLj6P7s3sBvPo3sxuMO97Uzg6qLcS1S6pRLFHBcniGt03D3HR/P9suy7Xt6vzNCd5PeqvC82GujQdYvZtKjXJ7+kKgXKU/K6PVkPkVVQ4i9hwHu8MZ3FDOOuocLIbwum71dVbEu6mXvGW57Cny3bo1umb0lX0eZBIUZl/MeimGULM70BkbbhkD2BdN7JcpZtss1lm8yxNZ+u2/Qvvniiy",
+  "score": 84
+}

@@ -104,4 +104,55 @@ function M.entities_in_area(surface, bounding_box, representative_cap)
   }
 end
 
+local function tile_is_blocked(tile)
+  if not tile then return true end
+  if tile.name == "out-of-map" then return true end
+  local ok, blocked = pcall(function()
+    if tile.collides_with then return tile.collides_with("water-tile") end
+    return false
+  end)
+  return ok and blocked or false
+end
+
+--- Read a bounded tile summary for planning tools. This is deliberately small:
+--- it exports only terrain names and blocked tile coordinates, never mutates.
+--- @param surface LuaSurface
+--- @param bounding_box table Factorio BoundingBox
+--- @param tile_cap number
+--- @return table { source, bounds, totalCount, blockedTiles, tiles }
+function M.tiles_in_area(surface, bounding_box, tile_cap)
+  tile_cap = tile_cap or 1024
+  local left = math.floor(bounding_box.left_top.x)
+  local top = math.floor(bounding_box.left_top.y)
+  local right = math.ceil(bounding_box.right_bottom.x) - 1
+  local bottom = math.ceil(bounding_box.right_bottom.y) - 1
+  local tiles = {}
+  local blocked = {}
+  local total = 0
+
+  for y = top, bottom do
+    for x = left, right do
+      total = total + 1
+      if #tiles < tile_cap then
+        local tile = surface.get_tile(x, y)
+        local entry = { x = x, y = y, name = tile and tile.name or "unknown" }
+        tiles[#tiles + 1] = entry
+        if tile_is_blocked(tile) then
+          blocked[#blocked + 1] = { x = x, y = y, name = entry.name }
+        end
+      end
+    end
+  end
+
+  return {
+    source = "factorio-live-local",
+    bounds = { left = left, top = top, right = right, bottom = bottom },
+    totalCount = total,
+    blockedTiles = blocked,
+    tiles = tiles,
+    truncated = total > tile_cap,
+    caps = { tiles = tile_cap },
+  }
+end
+
 return M

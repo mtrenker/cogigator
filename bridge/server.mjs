@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { deflateSync } from 'node:zlib';
+import { buildRedScienceTile } from '../tools/blueprints/planner-red-science.mjs';
 
 const BRIDGE_SCHEMA_VERSION = 'cogigator.bridge.v1';
 const ANALYZE_SCHEMA_VERSION = 'cogigator.analyze.v1';
@@ -208,6 +209,38 @@ function draftEntitiesForFinding(snapshot, findingCode) {
 function buildBlueprintProposal(snapshot, intent = '') {
   const primaryDiagnosis = snapshot.expectedDiagnosis?.find((entry) => entry.primary);
   const primaryFindingCode = primaryDiagnosis?.findingCode ?? snapshot.findings?.[0]?.code ?? null;
+
+  if (/red science|automation science/i.test(intent)) {
+    const plan = buildRedScienceTile({}, snapshot.surfaceScan ?? {});
+    return {
+      schemaVersion: BLUEPRINT_SCHEMA_VERSION,
+      requestId: randomUUID(),
+      serverTime: nowIso(),
+      experimentId: snapshot.experimentId,
+      scenarioId: snapshot.scenarioId,
+      variantId: snapshot.variant?.variantId,
+      intent,
+      mode: 'proposal-only',
+      mutation: false,
+      primaryFindingCode,
+      summary: plan.status === 'valid'
+        ? 'Semantic red science planner produced a validated west-side I/O tile.'
+        : 'Semantic red science planner found no valid candidate for the provided surface constraints.',
+      caution: 'Proposal-only. Semantic validation is not full Factorio simulation; import and inspect before placing.',
+      planner: {
+        name: plan.name,
+        status: plan.status,
+        footprint: plan.footprint,
+        io: plan.io,
+        validation: plan.validation,
+        surfaceSummary: plan.surfaceSummary,
+      },
+      blueprintJson: plan.status === 'valid' ? plan.blueprint : null,
+      blueprintString: plan.status === 'valid' ? plan.blueprintString : null,
+      humanApprovalRequired: true,
+    };
+  }
+
   const draft = draftEntitiesForFinding(snapshot, primaryFindingCode);
   const label = `Cogigator draft: ${snapshot.scenarioId ?? 'snapshot'} / ${primaryFindingCode ?? 'none'}`;
   const blueprint = {

@@ -289,16 +289,19 @@ commands.add_command(
       or settings.startup["cogigator-active-variant"].value
     local descriptor = experiments.get_variant(variant_id)
     local representative_cap = settings.startup["cogigator-entity-cap"].value
+    local bounds = worksites.to_bounding_box(site)
     local entities = live_scan.entities_in_area(
       surface,
-      worksites.to_bounding_box(site),
+      bounds,
       representative_cap
     )
+    local surface_scan = live_scan.tiles_in_area(surface, bounds, 1024)
 
     local snapshot = reports.build_snapshot(station, site, descriptor, game.tick, {
       scenario_id = "live-local",
       save = "local-save",
       entities = entities,
+      surfaceScan = surface_scan,
       representative_cap = representative_cap,
       permission_mode = settings.startup["cogigator-permission-mode"].value,
       metrics = global.cogigator.metrics,

@@ -64,9 +64,10 @@ New lesson:
 ## Next steps
 
 - Pause coordinate-only generation for production layouts.
-- Try a different approach:
+- Try the follow-up [Semantic Blueprint Planner](2026-06-27-semantic-blueprint-planner.md):
   - build from known-good Factorio primitives;
   - add semantic validators for inserter pickup/drop and belt lane flow;
+  - consume bounded `surfaceScan` tile information from live-local snapshots;
   - or use human-approved golden templates as seeds, then transform/parameterize them.
 - Keep the failed red science artifacts as regression examples:
   - `docs/blueprints/red-science-same-side.v2.txt`

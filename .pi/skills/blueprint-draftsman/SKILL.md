@@ -17,9 +17,13 @@ When asked for a Factorio blueprint:
 
 If the user rejects a generated blueprint as weird, treat that as a failed validation. Revise the approach; do not argue that the string is technically valid. Prefer golden primitives or human-approved templates over repeated coordinate-only generation.
 
-Project helper:
+Project helpers:
 
 ```bash
+# preferred for red science: semantic belt/inserter validation
+node tools/blueprints/planner-red-science.mjs
+
+# older coordinate-only experiments / regression examples
 node tools/blueprints/draftsman.mjs red-science-same-side
 ```
 
