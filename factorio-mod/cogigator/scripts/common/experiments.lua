@@ -91,8 +91,9 @@ end
 --- @return table
 function M.active_variant()
   local id
-  if global and global.cogigator then
-    id = global.cogigator.active_variant_id
+  local persistent = storage or global
+  if persistent and persistent.cogigator then
+    id = persistent.cogigator.active_variant_id
   end
   if not id then
     id = settings.startup["cogigator-active-variant"].value
