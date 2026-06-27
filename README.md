@@ -135,4 +135,4 @@ Infrastructure may be discussed only at the non-sensitive level already used in 
 
 ## Suggested next step
 
-The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. The next iteration is now the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md): blend Capacity Vector’s clarity with Cognition Flow’s fiction, then run the manual human comprehension probe before any live Factorio/Kubernetes validation.
+The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. The current iteration is the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md): the wording pass is in place, and the next useful implementation step is an in-game read-only entity shell for Field Stations, Cognition Processors, Memory Banks, and Planning Relays before any live Factorio/Kubernetes validation.

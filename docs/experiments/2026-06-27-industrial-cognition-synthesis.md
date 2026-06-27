@@ -1,10 +1,13 @@
 # Experiment: Cognition Network Synthesis
 
 - Date: 2026-06-27
-- Status: proposed
+- Status: running
 - Variants: synthesis of `cognition-flow` and `capacity-vector`
 - Agents/models involved: Pi, GPT-5.5
-- Related commits: `8abc48c` — read-only Cogigator A/B substrate spike
+- Related commits:
+  - `8abc48c` — read-only Cogigator A/B substrate spike
+  - `c88860f` — Cognition Network synthesis brief and fixture wording
+  - `42975de` — mod-side wording aligned with Cognition Network synthesis
 - Related resources:
   - [Industrial Cognition A/B experiment](2026-06-26-industrial-cognition-ab.md)
   - [A/B contract](2026-06-26-industrial-cognition-ab.contract.md)
@@ -92,6 +95,14 @@ Primary synthesis tests:
 - `under-computed` — does the player know what to build to restore cognition?
 - `dense-cell-truncated` — does truncation feel like a bounded factory system, not a bug?
 - Scenario 7 manual probe — can a reader answer “what would you build or change next?” from the Pi output alone?
+
+## Current prototype status
+
+The first synthesis pass is wording-only:
+
+- bridge fixtures now use Cognition Network language for degraded/truncated snapshots;
+- mod-side variant helpers and locale strings now point players toward concrete factory actions: add Field Stations, Cognition Processors, Memory Banks, or a Planning Relay;
+- no schema, bridge API, or mutation behavior changed.
 
 ## Acceptance criteria
 
