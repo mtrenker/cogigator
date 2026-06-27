@@ -16,6 +16,7 @@
   - [Runbook](2026-06-26-industrial-cognition-ab.runbook.md)
   - [Scorecard](2026-06-26-industrial-cognition-ab.scorecard.md)
   - [Safety/fairness review](2026-06-26-industrial-cognition-ab.review.md)
+  - [Human comprehension probe](2026-06-27-industrial-cognition-synthesis.probe.md)
 
 ## Question
 
@@ -116,7 +117,7 @@ The synthesis prototype now has two read-only layers:
 - No assistant mutation path exists.
 - Placing/removing the new entity shell is normal player-driven Factorio behavior; Cogigator only observes Field Station placement for status counts.
 - Pi output names the degraded capacity and suggests a factory action.
-- The manual comprehension probe succeeds for at least one degraded scenario.
+- The [manual comprehension probe](2026-06-27-industrial-cognition-synthesis.probe.md) succeeds for at least one degraded scenario.
 - The scorecard can be updated without inventing a third schema.
 
 ## Decision to make after prototype

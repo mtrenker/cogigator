@@ -304,7 +304,8 @@ The local A/B demo has passed the mechanical integration gate, and the Cognition
 - keep the shared read-only bridge/Pi path from the [runbook](./experiments/2026-06-26-industrial-cognition-ab.runbook.md);
 - preserve the [scorecard](./experiments/2026-06-26-industrial-cognition-ab.scorecard.md) for the manual human comprehension probe;
 - use the [Cognition Network synthesis brief](./experiments/2026-06-27-industrial-cognition-synthesis.md) as the current design source;
-- ask a reader/player what they would build next after seeing degraded/truncated Cogigator output;
+- run the [Cognition Network human comprehension probe](./experiments/2026-06-27-industrial-cognition-synthesis.probe.md) with a reader/player;
+- ask what they would build next after seeing degraded/truncated Cogigator output;
 - only after that, decide whether to design a reviewed live Factorio snapshot bridge;
 - update the [experiment record](./experiments/2026-06-26-industrial-cognition-ab.md) after that synthesis is tested;
 - keep the [review note](./experiments/2026-06-26-industrial-cognition-ab.review.md) as the safety gate for public-facing summaries.
