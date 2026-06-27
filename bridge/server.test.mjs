@@ -132,7 +132,7 @@ describe('local bridge stub', () => {
     assert.ok(decoded.blueprint.entities.length > 0);
   });
 
-  it('routes red science intents through the semantic planner', async () => {
+  it('does not recommend the failed red science semantic planner output', async () => {
     const { response, body } = await requestJson('/blueprint-proposal', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -147,9 +147,8 @@ describe('local bridge stub', () => {
     assert.equal(body.mode, 'proposal-only');
     assert.equal(body.mutation, false);
     assert.equal(body.planner.name, 'red-science-planned-west-io');
-    assert.equal(body.planner.status, 'valid');
-    assert.equal(body.planner.validation.ok, true);
-    assert.ok(body.blueprintString.startsWith('0'));
+    assert.equal(body.planner.status, 'failed-practical-review');
+    assert.equal(body.blueprintString, null);
   });
 
   it('rejects missing and unknown snapshot parameters', async () => {
