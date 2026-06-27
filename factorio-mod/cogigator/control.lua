@@ -12,6 +12,7 @@ local registry    = require("scripts.common.registry")
 local worksites   = require("scripts.common.worksites")
 local reports     = require("scripts.common.reports")
 local metrics     = require("scripts.common.metrics")
+local live_scan   = require("scripts.common.live_scan")
 
 -- Factorio 2.0 renamed the persistent mod table from `global` to `storage`.
 -- Keep the rest of the spike code readable while targeting 2.0.
@@ -241,6 +242,75 @@ commands.add_command(
         site.height
       ))
     end
+  end
+)
+
+-- /cogigator-export-snapshot [station-id]
+-- Export one live, read-only snapshot to script-output for local bridge import.
+commands.add_command(
+  "cogigator-export-snapshot",
+  { "cogigator-cmd-export-snapshot-help" },
+  function(event)
+    ensure_state()
+    local player = event.player_index and game.get_player(event.player_index)
+    local function reply(msg)
+      if player then player.print(msg) else log(msg) end
+    end
+
+    local station_id = event.parameter and event.parameter:match("^%S+$")
+    local station
+    if station_id then
+      station = registry.get(global.cogigator.registry, station_id)
+      if not station then
+        reply("[cogigator] unknown station: " .. station_id)
+        return
+      end
+    else
+      station = registry.all(global.cogigator.registry)[1]
+      if not station then
+        reply("[cogigator] no Field Station registered; place one first")
+        return
+      end
+    end
+
+    local site = worksites.get(global.cogigator.worksites, station.station_id)
+    if not site then
+      reply("[cogigator] station has no worksite: " .. station.station_id)
+      return
+    end
+
+    local surface = game.surfaces[site.surface]
+    if not surface then
+      reply("[cogigator] unknown surface: " .. tostring(site.surface))
+      return
+    end
+
+    local variant_id = global.cogigator.active_variant_id
+      or settings.startup["cogigator-active-variant"].value
+    local descriptor = experiments.get_variant(variant_id)
+    local representative_cap = settings.startup["cogigator-entity-cap"].value
+    local entities = live_scan.entities_in_area(
+      surface,
+      worksites.to_bounding_box(site),
+      representative_cap
+    )
+
+    local snapshot = reports.build_snapshot(station, site, descriptor, game.tick, {
+      scenario_id = "live-local",
+      save = "local-save",
+      entities = entities,
+      representative_cap = representative_cap,
+      permission_mode = settings.startup["cogigator-permission-mode"].value,
+      metrics = global.cogigator.metrics,
+    })
+
+    helpers.write_file(
+      "cogigator/live-snapshot.json",
+      helpers.table_to_json(snapshot) .. "\n",
+      false
+    )
+    reply("[cogigator] exported live read-only snapshot for " .. station.station_id
+      .. " to script-output/cogigator/live-snapshot.json")
   end
 )
 

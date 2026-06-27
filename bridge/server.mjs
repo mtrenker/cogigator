@@ -9,6 +9,7 @@ const ANALYZE_SCHEMA_VERSION = 'cogigator.analyze.v1';
 const BRIDGE_VERSION = '0.1.0-local';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixturesDir = join(__dirname, 'fixtures');
+const liveSnapshotFile = process.env.COGIGATOR_LIVE_SNAPSHOT_FILE;
 
 const scenarioTitles = {
   'starved-assembler': 'Starved assembler',
@@ -63,6 +64,10 @@ export async function loadFixtureIndex() {
 }
 
 export async function loadSnapshot(scenarioId, variantId) {
+  if (scenarioId === 'live-local') {
+    return loadLiveSnapshot(variantId);
+  }
+
   const index = await loadFixtureIndex();
   if (!index.scenarios.includes(scenarioId)) {
     const allowed = index.scenarios.join(', ');
@@ -87,6 +92,25 @@ export async function loadSnapshot(scenarioId, variantId) {
     );
   }
   return snapshotCache.get(cacheKey);
+}
+
+export async function loadLiveSnapshot(variantId) {
+  if (!liveSnapshotFile) {
+    throw Object.assign(new Error('Live local snapshot is not configured. Set COGIGATOR_LIVE_SNAPSHOT_FILE to Factorio script-output/cogigator/live-snapshot.json.'), {
+      statusCode: 404,
+      details: { scenarioId: 'live-local' }
+    });
+  }
+
+  const snapshot = await readJson(liveSnapshotFile);
+  const actualVariant = snapshot?.variant?.variantId;
+  if (actualVariant && actualVariant !== variantId) {
+    throw Object.assign(new Error(`Live snapshot variant mismatch: requested ${variantId}, file contains ${actualVariant}`), {
+      statusCode: 409,
+      details: { requestedVariant: variantId, actualVariant }
+    });
+  }
+  return snapshot;
 }
 
 async function loadVariants(index) {

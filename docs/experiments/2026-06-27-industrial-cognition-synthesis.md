@@ -108,7 +108,9 @@ The synthesis prototype now has two read-only layers:
 - the Factorio mod defines an in-game entity shell for those four structures so the network can be placed and discussed in-game;
 - runtime code observes Field Station placement/removal, updates registry counts, and assigns/releases one default 32×32 read-only worksite;
 - local Windows Factorio smoke testing confirmed placement shows `stations=1 worksites=1`, `/cogigator-worksites` prints bounds, and removal returns to `stations=0 worksites=0`;
-- no schema, bridge API, live bridge connection, assistant action, or world-mutation behavior changed.
+- a local export command, `/cogigator-export-snapshot [station-id]`, writes one read-only snapshot to Factorio `script-output/cogigator/live-snapshot.json`;
+- the local bridge can read that file as `scenarioId=live-local` when started with `COGIGATOR_LIVE_SNAPSHOT_FILE=<path>`;
+- no schema, assistant action, live server deployment, or world-mutation behavior changed.
 
 ## Acceptance criteria
 
@@ -127,11 +129,11 @@ The synthesis prototype now has two read-only layers:
 | Does Cognition Network improve readability over either original variant? | self-probe says yes; validate with second person later |
 | Are explicit capacities still visible enough? | keep all for now |
 | Does the fiction feel Factorio-native? | proceed with Cognition Network wording |
-| Is live mod testing worth doing next? | design live read-only snapshot extraction next; review before any live deployment |
+| Is live mod testing worth doing next? | local read-only export/import prototype exists; review before any live deployment |
 
 ## Timeline summary
 
-After the first A/B spike passed the local integration gate, the next iteration became **Cognition Network**: explicit capacity bottlenecks framed as a built, powered, saturating factory system. The first in-game shell now exists and has been locally smoke-tested: Field Stations create read-only 32×32 worksites, while the bridge/Pi path remains fixture-backed until a later reviewed integration phase.
+After the first A/B spike passed the local integration gate, the next iteration became **Cognition Network**: explicit capacity bottlenecks framed as a built, powered, saturating factory system. The first in-game shell now exists and has been locally smoke-tested: Field Stations create read-only 32×32 worksites, and a local-only export/import path can hand one live read-only snapshot to the bridge without adding assistant-controlled mutation.
 
 ## Safety/publication notes
 

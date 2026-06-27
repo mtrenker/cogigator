@@ -60,6 +60,7 @@ The goal is not only to build a mod. The goal is to show how AI-assisted plannin
 | [`docs/experiments/2026-06-26-industrial-cognition-ab.review.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.review.md) | Public-safety and variant-fairness review gate. |
 | [`docs/experiments/2026-06-27-industrial-cognition-synthesis.md`](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md) | Cognition Network synthesis brief for the next iteration. |
 | [`docs/experiments/2026-06-27-industrial-cognition-synthesis.probe.md`](./docs/experiments/2026-06-27-industrial-cognition-synthesis.probe.md) | Manual human comprehension probe for the synthesis. |
+| [`docs/experiments/2026-06-27-live-local-snapshot-runbook.md`](./docs/experiments/2026-06-27-live-local-snapshot-runbook.md) | Local-only live read-only snapshot export/import runbook. |
 | [`docs/DEVELOPMENT_PROCESS.md`](./docs/DEVELOPMENT_PROCESS.md) | How the AI-assisted documentation/planning workflow works. |
 | [`docs/experiments/`](./docs/experiments/) | Standardized experiment records. |
 
@@ -136,4 +137,4 @@ Infrastructure may be discussed only at the non-sensitive level already used in 
 
 ## Suggested next step
 
-The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. The current iteration is the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md): the wording pass and in-game read-only entity/worksite shell are in place, locally smoke-tested, and the [self-probe](./docs/experiments/2026-06-27-industrial-cognition-synthesis.probe.md) passed. Next, design live read-only Factorio snapshot extraction for the bridge in a separately reviewed phase.
+The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. The current iteration is the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md): the wording pass and in-game read-only entity/worksite shell are in place, locally smoke-tested, and the [self-probe](./docs/experiments/2026-06-27-industrial-cognition-synthesis.probe.md) passed. Next, test the [local-only live snapshot export/import loop](./docs/experiments/2026-06-27-live-local-snapshot-runbook.md), then review before any live server deployment.

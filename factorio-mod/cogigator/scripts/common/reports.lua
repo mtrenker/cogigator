@@ -24,6 +24,12 @@
 
 local experiments = require("scripts.common.experiments")
 local findings    = require("scripts.common.findings")
+local metrics     = require("scripts.common.metrics")
+
+local VARIANT_MODULES = {
+  ["cognition-flow"] = require("scripts.variants.cognition-flow"),
+  ["capacity-vector"] = require("scripts.variants.capacity-vector"),
+}
 
 local M = {}
 
@@ -67,11 +73,7 @@ end
 --- @return table|nil
 function M.resolve_variant_module(variant_id)
   if not variant_id then return nil end
-  local ok, mod = pcall(require, "scripts.variants." .. variant_id)
-  if ok and type(mod) == "table" then
-    return mod
-  end
-  return nil
+  return VARIANT_MODULES[variant_id]
 end
 
 --- Call the selected variant module through the shared cognition interface.
@@ -310,7 +312,6 @@ function M.build_snapshot(station_entry, worksite_entry, variant_descriptor, tic
 
   -- 6. Optional instrumentation.
   if opts.metrics then
-    local metrics = require("scripts.common.metrics")
     metrics.snapshot_built(opts.metrics, descriptor and descriptor.variant_id)
     metrics.findings_emitted(opts.metrics, #finding_list)
     if findings.is_under_computed(cognition) then
