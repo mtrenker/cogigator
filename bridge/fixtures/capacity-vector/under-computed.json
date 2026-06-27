@@ -56,7 +56,7 @@
         "unit": "tiles^2",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Increase scan capacity or shrink the watched worksite."
+        "note": "Worksite exceeds Field Station coverage. Add stations or split the cell."
       },
       {
         "key": "attention",
@@ -66,7 +66,7 @@
         "unit": "slots",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Too many watches are competing for attention."
+        "note": "Cognition processors are saturated. Add processing or watch fewer sites."
       },
       {
         "key": "memory",
@@ -76,7 +76,7 @@
         "unit": "units",
         "satisfied": false,
         "bottleneck": false,
-        "note": "Short history limits confidence."
+        "note": "Memory banks are shallow; add storage to improve confidence."
       },
       {
         "key": "planning",
@@ -86,7 +86,7 @@
         "unit": "bool",
         "satisfied": false,
         "bottleneck": false,
-        "note": "Planning is disabled while the station is under capacity."
+        "note": "Planning Relay is offline while the Cognition Network is under capacity."
       }
     ],
     "degradation": {
@@ -157,7 +157,7 @@
       "severity": "warning",
       "subjectUnitNumber": null,
       "subjectName": null,
-      "message": "Station cognition capacity below deterministic report demand.",
+      "message": "Cognition Network capacity is below deterministic report demand.",
       "evidence": {
         "degraded": true
       },
@@ -176,7 +176,7 @@
   "expectedDiagnosis": [
     {
       "findingCode": "under-computed",
-      "summary": "Factory symptoms are clear enough, but station capacity is degraded and limits explanation depth.",
+      "summary": "Factory symptoms are clear enough, but the Cognition Network is degraded and limits explanation depth.",
       "primary": true
     }
   ]

@@ -68,7 +68,7 @@
         "unit": "cog/min",
         "satisfied": true,
         "bottleneck": false,
-        "note": "Flow meets deterministic report demand."
+        "note": "Cognition Network has enough processing flow for this report."
       },
       {
         "key": "cognitionBuffer",
@@ -78,7 +78,7 @@
         "unit": "cog",
         "satisfied": true,
         "bottleneck": false,
-        "note": "Buffer has enough reserve for this report."
+        "note": "Cognition reserves are charged for this report."
       },
       {
         "key": "memory",
@@ -88,7 +88,7 @@
         "unit": "units",
         "satisfied": true,
         "bottleneck": false,
-        "note": "Recent observations are retained."
+        "note": "Memory banks retain recent observations."
       }
     ],
     "degradation": {

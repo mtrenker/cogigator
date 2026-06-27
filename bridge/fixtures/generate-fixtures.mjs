@@ -37,41 +37,41 @@ const capacityTemplates = {
   "cognition-flow": {
     normal: [
       cap("sightline", "Sightline", 1024, 1024, "tiles^2", true, false, "Entire worksite is visible."),
-      cap("cognitionFlow", "Cognition Flow", 24, 20, "cog/min", true, false, "Flow meets deterministic report demand."),
-      cap("cognitionBuffer", "Cognition Buffer", 80, 60, "cog", true, false, "Buffer has enough reserve for this report."),
-      cap("memory", "Memory", 8, 6, "units", true, false, "Recent observations are retained.")
+      cap("cognitionFlow", "Cognition Flow", 24, 20, "cog/min", true, false, "Cognition Network has enough processing flow for this report."),
+      cap("cognitionBuffer", "Cognition Buffer", 80, 60, "cog", true, false, "Cognition reserves are charged for this report."),
+      cap("memory", "Memory", 8, 6, "units", true, false, "Memory banks retain recent observations.")
     ],
     degraded: [
       cap("sightline", "Sightline", 1024, 1024, "tiles^2", true, false, "Entire worksite is visible."),
-      cap("cognitionFlow", "Cognition Flow", 8, 20, "cog/min", false, true, "Build more cognition production; flow is below analysis demand."),
-      cap("cognitionBuffer", "Cognition Buffer", 4, 60, "cog", false, true, "Memory banks are nearly empty."),
-      cap("memory", "Memory", 3, 6, "units", false, false, "Short history limits confidence.")
+      cap("cognitionFlow", "Cognition Flow", 8, 20, "cog/min", false, true, "Cognition processors are saturated. Add processing or reduce watched sites."),
+      cap("cognitionBuffer", "Cognition Buffer", 4, 60, "cog", false, true, "Cognition reserves are nearly empty. Add buffer or memory-bank capacity."),
+      cap("memory", "Memory", 3, 6, "units", false, false, "Memory banks are shallow; add storage to improve confidence.")
     ],
     dense: [
-      cap("sightline", "Sightline", 1024, 1600, "tiles^2", false, true, "Dense cell exceeds current sightline coverage."),
-      cap("cognitionFlow", "Cognition Flow", 18, 28, "cog/min", false, true, "Report cadence slowed by high entity count."),
-      cap("cognitionBuffer", "Cognition Buffer", 22, 60, "cog", false, false, "Reserve was spent on capped entity sampling."),
-      cap("memory", "Memory", 8, 6, "units", true, false, "History remains available.")
+      cap("sightline", "Sightline", 1024, 1600, "tiles^2", false, true, "Worksite exceeds current sightline coverage. Add Field Stations or split the cell."),
+      cap("cognitionFlow", "Cognition Flow", 18, 28, "cog/min", false, true, "Cognition processors are saturated by this dense cell. Add processing or split the worksite."),
+      cap("cognitionBuffer", "Cognition Buffer", 22, 60, "cog", false, false, "Cognition reserves were spent on capped entity sampling."),
+      cap("memory", "Memory", 8, 6, "units", true, false, "Memory banks remain available.")
     ]
   },
   "capacity-vector": {
     normal: [
-      cap("scan", "Scan", 1024, 1024, "tiles^2", true, false, "Scan budget covers the worksite."),
-      cap("attention", "Attention", 3, 2, "slots", true, false, "One station slot remains free."),
-      cap("memory", "Memory", 8, 6, "units", true, false, "Recent observations are retained."),
-      cap("planning", "Planning", 1, 1, "bool", true, false, "Planning gate is enabled for read-only advice.")
+      cap("scan", "Scan", 1024, 1024, "tiles^2", true, false, "Field Station coverage spans the worksite."),
+      cap("attention", "Attention", 3, 2, "slots", true, false, "Cognition processors have one attention slot free."),
+      cap("memory", "Memory", 8, 6, "units", true, false, "Memory banks retain recent observations."),
+      cap("planning", "Planning", 1, 1, "bool", true, false, "Planning Relay is online for read-only advice.")
     ],
     degraded: [
-      cap("scan", "Scan", 512, 1024, "tiles^2", false, true, "Increase scan capacity or shrink the watched worksite."),
-      cap("attention", "Attention", 1, 2, "slots", false, true, "Too many watches are competing for attention."),
-      cap("memory", "Memory", 3, 6, "units", false, false, "Short history limits confidence."),
-      cap("planning", "Planning", 0, 1, "bool", false, false, "Planning is disabled while the station is under capacity.")
+      cap("scan", "Scan", 512, 1024, "tiles^2", false, true, "Worksite exceeds Field Station coverage. Add stations or split the cell."),
+      cap("attention", "Attention", 1, 2, "slots", false, true, "Cognition processors are saturated. Add processing or watch fewer sites."),
+      cap("memory", "Memory", 3, 6, "units", false, false, "Memory banks are shallow; add storage to improve confidence."),
+      cap("planning", "Planning", 0, 1, "bool", false, false, "Planning Relay is offline while the Cognition Network is under capacity.")
     ],
     dense: [
-      cap("scan", "Scan", 1024, 1600, "tiles^2", false, true, "Dense cell exceeds scan budget."),
-      cap("attention", "Attention", 1, 3, "slots", false, true, "Attention is capped while sampling the dense cell."),
-      cap("memory", "Memory", 8, 6, "units", true, false, "History remains available."),
-      cap("planning", "Planning", 1, 1, "bool", true, false, "Planning gate remains available.")
+      cap("scan", "Scan", 1024, 1600, "tiles^2", false, true, "Dense cell exceeds Field Station coverage. Add stations or split the cell."),
+      cap("attention", "Attention", 1, 3, "slots", false, true, "Cognition processors are saturated while sampling the dense cell."),
+      cap("memory", "Memory", 8, 6, "units", true, false, "Memory banks remain available."),
+      cap("planning", "Planning", 1, 1, "bool", true, false, "Planning Relay remains online for read-only advice.")
     ]
   }
 };
@@ -170,10 +170,10 @@ const scenarios = {
       ]
     },
     findings: [
-      finding("under-computed", "warning", null, null, "Station cognition capacity below deterministic report demand.", { degraded: true })
+      finding("under-computed", "warning", null, null, "Cognition Network capacity is below deterministic report demand.", { degraded: true })
     ],
     expectedDiagnosis: [
-      diagnosis("under-computed", "Factory symptoms are clear enough, but station capacity is degraded and limits explanation depth.", true)
+      diagnosis("under-computed", "Factory symptoms are clear enough, but the Cognition Network is degraded and limits explanation depth.", true)
     ]
   },
   "dense-cell-truncated": {
@@ -200,7 +200,7 @@ const scenarios = {
       finding("input-starved", "error", 601, "assembling-machine-2", "Dense cell sample includes a gear assembler with no iron input.", { item: "iron-plate", count: 0 }),
       finding("output-blocked", "error", 602, "assembling-machine-2", "Dense cell sample includes a copper-cable assembler with full output.", { item: "copper-cable", outputCount: 100 }),
       finding("low-power", "warning", null, null, "Dense cell network is under-supplied at 88% satisfaction.", { satisfaction: 0.88, demandKw: 2800, supplyKw: 2464 }),
-      finding("under-computed", "warning", null, null, "Dense cell exceeded cognition/report caps; representative list is truncated.", { omittedEntityCount: 55 })
+      finding("under-computed", "warning", null, null, "Dense cell exceeded Cognition Network/report caps; representative list is truncated.", { omittedEntityCount: 55 })
     ],
     expectedDiagnosis: [
       diagnosis("input-starved", "Primary sampled fault: one gear assembler has no iron input.", true),

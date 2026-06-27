@@ -68,7 +68,7 @@
         "unit": "cog/min",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Build more cognition production; flow is below analysis demand."
+        "note": "Cognition processors are saturated. Add processing or reduce watched sites."
       },
       {
         "key": "cognitionBuffer",
@@ -78,7 +78,7 @@
         "unit": "cog",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Memory banks are nearly empty."
+        "note": "Cognition reserves are nearly empty. Add buffer or memory-bank capacity."
       },
       {
         "key": "memory",
@@ -88,7 +88,7 @@
         "unit": "units",
         "satisfied": false,
         "bottleneck": false,
-        "note": "Short history limits confidence."
+        "note": "Memory banks are shallow; add storage to improve confidence."
       }
     ],
     "degradation": {
@@ -160,7 +160,7 @@
       "severity": "warning",
       "subjectUnitNumber": null,
       "subjectName": null,
-      "message": "Station cognition capacity below deterministic report demand.",
+      "message": "Cognition Network capacity is below deterministic report demand.",
       "evidence": {
         "degraded": true
       },
@@ -179,7 +179,7 @@
   "expectedDiagnosis": [
     {
       "findingCode": "under-computed",
-      "summary": "Factory symptoms are clear enough, but station capacity is degraded and limits explanation depth.",
+      "summary": "Factory symptoms are clear enough, but the Cognition Network is degraded and limits explanation depth.",
       "primary": true
     }
   ]

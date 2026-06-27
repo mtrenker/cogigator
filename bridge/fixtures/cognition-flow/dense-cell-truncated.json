@@ -58,7 +58,7 @@
         "unit": "tiles^2",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Dense cell exceeds current sightline coverage."
+        "note": "Worksite exceeds current sightline coverage. Add Field Stations or split the cell."
       },
       {
         "key": "cognitionFlow",
@@ -68,7 +68,7 @@
         "unit": "cog/min",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Report cadence slowed by high entity count."
+        "note": "Cognition processors are saturated by this dense cell. Add processing or split the worksite."
       },
       {
         "key": "cognitionBuffer",
@@ -78,7 +78,7 @@
         "unit": "cog",
         "satisfied": false,
         "bottleneck": false,
-        "note": "Reserve was spent on capped entity sampling."
+        "note": "Cognition reserves were spent on capped entity sampling."
       },
       {
         "key": "memory",
@@ -88,7 +88,7 @@
         "unit": "units",
         "satisfied": true,
         "bottleneck": false,
-        "note": "History remains available."
+        "note": "Memory banks remain available."
       }
     ],
     "degradation": {
@@ -315,7 +315,7 @@
       "severity": "warning",
       "subjectUnitNumber": null,
       "subjectName": null,
-      "message": "Dense cell exceeded cognition/report caps; representative list is truncated.",
+      "message": "Dense cell exceeded Cognition Network/report caps; representative list is truncated.",
       "evidence": {
         "omittedEntityCount": 55
       },

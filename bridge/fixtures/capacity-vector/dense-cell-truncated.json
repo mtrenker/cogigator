@@ -56,7 +56,7 @@
         "unit": "tiles^2",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Dense cell exceeds scan budget."
+        "note": "Dense cell exceeds Field Station coverage. Add stations or split the cell."
       },
       {
         "key": "attention",
@@ -66,7 +66,7 @@
         "unit": "slots",
         "satisfied": false,
         "bottleneck": true,
-        "note": "Attention is capped while sampling the dense cell."
+        "note": "Cognition processors are saturated while sampling the dense cell."
       },
       {
         "key": "memory",
@@ -76,7 +76,7 @@
         "unit": "units",
         "satisfied": true,
         "bottleneck": false,
-        "note": "History remains available."
+        "note": "Memory banks remain available."
       },
       {
         "key": "planning",
@@ -86,7 +86,7 @@
         "unit": "bool",
         "satisfied": true,
         "bottleneck": false,
-        "note": "Planning gate remains available."
+        "note": "Planning Relay remains online for read-only advice."
       }
     ],
     "degradation": {
@@ -311,7 +311,7 @@
       "severity": "warning",
       "subjectUnitNumber": null,
       "subjectName": null,
-      "message": "Dense cell exceeded cognition/report caps; representative list is truncated.",
+      "message": "Dense cell exceeded Cognition Network/report caps; representative list is truncated.",
       "evidence": {
         "omittedEntityCount": 55
       },

@@ -58,6 +58,7 @@ The goal is not only to build a mod. The goal is to show how AI-assisted plannin
 | [`docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.runbook.md) | Local read-only demo loop for both variants. |
 | [`docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.scorecard.md) | Evaluation worksheet for scoring the variants. |
 | [`docs/experiments/2026-06-26-industrial-cognition-ab.review.md`](./docs/experiments/2026-06-26-industrial-cognition-ab.review.md) | Public-safety and variant-fairness review gate. |
+| [`docs/experiments/2026-06-27-industrial-cognition-synthesis.md`](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md) | Cognition Network synthesis brief for the next iteration. |
 | [`docs/DEVELOPMENT_PROCESS.md`](./docs/DEVELOPMENT_PROCESS.md) | How the AI-assisted documentation/planning workflow works. |
 | [`docs/experiments/`](./docs/experiments/) | Standardized experiment records. |
 
@@ -134,4 +135,4 @@ Infrastructure may be discussed only at the non-sensitive level already used in 
 
 ## Suggested next step
 
-The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. Next, synthesize the clearer Capacity Vector diagnostics with the stronger Cognition Flow fiction, then run the manual human comprehension probe before any live Factorio/Kubernetes validation.
+The local read-only integration check passed for both variants, including the Pi extension’s readable snapshot display. The next iteration is now the [Cognition Network synthesis](./docs/experiments/2026-06-27-industrial-cognition-synthesis.md): blend Capacity Vector’s clarity with Cognition Flow’s fiction, then run the manual human comprehension probe before any live Factorio/Kubernetes validation.
